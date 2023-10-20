@@ -19,13 +19,14 @@ public class VideoJuego07 {
             mostrarTablero(misSoldados);  //Soldados y tablero creados, tablero mostrado
             System.out.println("DATOS DE EJERCITO, JUGADOR 1..."); 
             datosMayorVida(misSoldados,orden,0);  
-            System.out.println(" Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,0)+"\n");
+            System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,0)+"\n");
             System.out.println("DATOS DE EJERCITO, JUGADOR 2...");
             datosMayorVida(misSoldados,orden,1); 
-            System.out.println(" Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,1)+"\n");
+            System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,1)+"\n");
             mostrarDatosOrden(misSoldados,orden); 
             rankingPoderBurbuja(orden);
             rankingPoderSeleccion(orden);
+            System.out.println("COMENZAMOS LA BATALLA!!!"); //Inician los turnos por jugador
             nuevasPosiciones(0,orden,misSoldados);
             continuar();
         }
@@ -44,13 +45,13 @@ public class VideoJuego07 {
                 fil=(int)(Math.random()*10);
                 col=(int)(Math.random()*10);
             }
-            Soldado nuevoSoldado;
+            Soldado nuevoSoldado;  //
             nuevoSoldado=new Soldado("Soldado"+ejercito+"X"+i); //nombre asignado //METODO SOBRECARGADO X1
             nuevoSoldado.Soldado(ejercito,fil+1); //ejercito, fila y luego columna asignados METODO SOBRECARGADOX2
             nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
             nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
             nuevoSoldado.Soldado(1,1,1,"Ofensiva",true);  //Demas atributos nuevos asignados METODO SOBRECARGADO X3
-            arrL.get(fil).set(col, nuevoSoldado); //Agrega nuestro Objeto Soldado en la posicion del tablero
+            arrL.get(fil).set(col, nuevoSoldado); //Soldado en el tablero datos fil-1 y col-1
             orden.add(arrL.get(fil).get(col)); //Arreglo que guardara el ejercito ordenado por creacion
         }
     }
@@ -80,16 +81,16 @@ public class VideoJuego07 {
         System.out.println("  Vida Actual: "+ posicion.getVidaActual());
         System.out.println("  Velocidad: "+ posicion.getVelocidad());
         System.out.println("  Actitud: "+ posicion.getActitud());
-        System.out.println("  Vive: "+ posicion.getNivelAtaque()+"\n");
+        System.out.println("  Vive: "+ posicion.getVive()+"\n");
     }
      public static void datosMayorVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,int ejercito){
-        System.out.println(" Datos de soldado con mayor vida: ");
+        System.out.println("-Datos de soldado con mayor vida: ");
         int maxI=0,maxJ=0,mayorNivelV=0;
         for(int i=0;i<orden.size();i++){
             int fil=orden.get(i).getFila()-1;
             int col=orden.get(i).getColumna()-1;
             Soldado posicion=arrL.get(fil).get(col);
-            if(posicion.getEjercito()==ejercito){
+            if (posicion.getEjercito()==ejercito){
                 if (mayorNivelV<posicion.getVidaActual()){
                     mayorNivelV=posicion.getVidaActual();
                     maxI=fil;
@@ -138,7 +139,7 @@ public class VideoJuego07 {
         }
         System.out.println("RANKING DE PODER POR ORDENAMIENTO BURBUJA...");
         for(int i=0;i<orden.size();i++)
-            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t"+orden.get(i).getVidaActual());
+            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud: "+orden.get(i).getVidaActual());
     }
     public static void rankingPoderSeleccion(ArrayList<Soldado> orden){
         int n=orden.size();
@@ -154,7 +155,7 @@ public class VideoJuego07 {
     }
         System.out.println("RANKING DE PODER POR ORDENAMIENTO SELECCION...");
         for(int i=0;i<orden.size();i++)
-            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t"+orden.get(i).getVidaActual());
+            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud"+orden.get(i).getVidaActual());
     }
     public static int definirGanador (ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden){//Tomando en cuenta el promedio de vida de c/ejercito
         double promedioEjercito0 = promedioNivelVida(arrL,orden, 0);
@@ -169,39 +170,46 @@ public class VideoJuego07 {
     public static boolean continuar(){
         Scanner sc=new Scanner (System.in);
         System.out.print("Turno del siguiente jugador, preparado? ");
-        if (sc.next().equals("N"))
-            return false;
-        return true;
+        return !sc.next().equals("N");
     }   
     public static void nuevasPosiciones(int e,ArrayList<Soldado> orden,ArrayList<ArrayList<Soldado>> arrL){
         Scanner sc=new Scanner(System.in);
-        System.out.println("\nTurno de Jugador"+(e+1));
-        System.out.println("Elija un soldado de su Ejercito 0(Rojo)...");
+        String eColor;
+        if (e == 0)
+            eColor="rojo";
+        else
+            eColor="azul";
+        System.out.println("\n>>>Turno de Jugador "+(e+1)+"<<<");
+        System.out.println("Elija un soldado de su Ejercito "+e+" "+eColor); //Se mostrara la lista de Soldados de su ejercito
         for(int i=0;i<orden.size();i++){
             if(orden.get(i).getEjercito()==e){
                 Soldado posicion=orden.get(i);
                 System.out.println("-"+posicion.getNombre()+": ");
-                System.out.println("  posicion FilaXColumna: "+posicion.getFila()+"x"+posicion.getColumnaStr()+", NRO. "+i);
+                System.out.println("  posicion: "+posicion.getFila()+"x"+posicion.getColumnaStr()+", NRO. "+i);
             }
         }
-        System.out.print("Ingrese el NRO. del soldado: ");
+        System.out.print("Ingrese el NRO. del soldado seleccionado: ");
         Soldado soldadoE=orden.get(sc.nextInt());
         int fil=soldadoE.getFila();
-        int col=soldadoE.getColumna(); //En modo numero para poder ubicarla en el tablero
+        int col=soldadoE.getColumna(); //En modo numero para poder ubicarla en el tablero usando arr orden
         System.out.println("Soldado ubicado "+fil+"x"+soldadoE.getColumnaStr());
-        System.out.println("Posibles direcciones de movimiento disponibles...");
+        System.out.println("Direcciones de movimiento disponibles...");
         ArrayList<Soldado> posiciones=new ArrayList<>();
         Soldado arriba=arrL.get(fil-1).get(col);
+        arriba.setMovimiento("arriba");
         posiciones.add(arriba);
         Soldado abajo=arrL.get(fil+1).get(col);
+        abajo.setMovimiento("abajo");
         posiciones.add(abajo);
         Soldado derecha=arrL.get(fil).get(col+1);
+        abajo.setMovimiento("derecha");
         posiciones.add(derecha);
         Soldado izquierda=arrL.get(fil).get(col-1);
+        abajo.setMovimiento("izquierda");
         posiciones.add(izquierda);
-        for (Soldado posicion: posiciones){
-            if (posicion==null)
-                System.out.println(posicion);
+        for (Soldado movimiento: posiciones){
+            if (movimiento==null)
+                System.out.println(movimiento.getMovimiento());
         }
         System.out.print("Ingrese direccion de movimiento: ");
         
