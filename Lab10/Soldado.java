@@ -41,7 +41,10 @@ public class Soldado {
     public int getFila(){
         return fila;
     }
-    
+    //Necesarios
+    public void setFila(int f){
+        fila=f;
+    }
     public void setColumna(int c){  //Debido a que columna es una letra 
         columna = c;
         switch (columna){
@@ -90,7 +93,10 @@ public class Soldado {
         return vidaActual;
     }    
     public void setVive(boolean v){
-        
+        if (v == true)
+            vive="si";
+        else 
+            vive="no";
     }
     public String getVive(){
         return vive;

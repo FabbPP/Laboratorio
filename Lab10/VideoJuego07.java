@@ -46,8 +46,8 @@ public class VideoJuego07 {
                 col=(int)(Math.random()*10);
             }
             Soldado nuevoSoldado;  //
-            nuevoSoldado=new Soldado("Soldado"+ejercito+"X"+i); //nombre asignado //METODO SOBRECARGADO X1
-            nuevoSoldado.Soldado(ejercito,fil+1); //ejercito, fila y luego columna asignados METODO SOBRECARGADOX2
+            nuevoSoldado=new Soldado("Soldado"+ejercito+"X"+i); //nombre asignado 
+            nuevoSoldado.Soldado(ejercito,fil+1); //ejercito, fila y luego columna asignados 
             nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
             nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
             nuevoSoldado.Soldado(1,1,1,"Ofensiva",true);  //Demas atributos nuevos asignados METODO SOBRECARGADO X3
@@ -139,7 +139,7 @@ public class VideoJuego07 {
         }
         System.out.println("RANKING DE PODER POR ORDENAMIENTO BURBUJA...");
         for(int i=0;i<orden.size();i++)
-            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud: "+orden.get(i).getVidaActual());
+            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t salud: "+orden.get(i).getVidaActual());
     }
     public static void rankingPoderSeleccion(ArrayList<Soldado> orden){
         int n=orden.size();
@@ -180,39 +180,53 @@ public class VideoJuego07 {
         else
             eColor="azul";
         System.out.println("\n>>>Turno de Jugador "+(e+1)+"<<<");
-        System.out.println("Elija un soldado de su Ejercito "+e+" "+eColor); //Se mostrara la lista de Soldados de su ejercito
+        System.out.println("**Elija un soldado de su Ejercito "+e+" "+eColor); //Se mostrara la lista de Soldados de su ejercito
         for(int i=0;i<orden.size();i++){
             if(orden.get(i).getEjercito()==e){
                 Soldado posicion=orden.get(i);
-                System.out.println("-"+posicion.getNombre()+": ");
-                System.out.println("  posicion: "+posicion.getFila()+"x"+posicion.getColumnaStr()+", NRO. "+i);
+                System.out.println("NRO "+i+". "+posicion.getNombre()+": ");
+                System.out.println("  posicion: "+posicion.getFila()+"x"+posicion.getColumnaStr());
             }
         }
-        System.out.print("Ingrese el NRO. del soldado seleccionado: ");
+        System.out.print(">Ingrese NRO. de soldado seleccionado: ");
         Soldado soldadoE=orden.get(sc.nextInt());
         int fil=soldadoE.getFila();
         int col=soldadoE.getColumna(); //En modo numero para poder ubicarla en el tablero usando arr orden
         System.out.println("Soldado ubicado "+fil+"x"+soldadoE.getColumnaStr());
-        System.out.println("Direcciones de movimiento disponibles...");
+        System.out.println("**Elija una de las direcciones de movimiento disponibles...");
         ArrayList<Soldado> posiciones=new ArrayList<>();
-        Soldado arriba=arrL.get(fil-1).get(col);
-        arriba.setMovimiento("arriba");
-        posiciones.add(arriba);
-        Soldado abajo=arrL.get(fil+1).get(col);
-        abajo.setMovimiento("abajo");
-        posiciones.add(abajo);
-        Soldado derecha=arrL.get(fil).get(col+1);
-        abajo.setMovimiento("derecha");
-        posiciones.add(derecha);
-        Soldado izquierda=arrL.get(fil).get(col-1);
-        abajo.setMovimiento("izquierda");
-        posiciones.add(izquierda);
-        for (Soldado movimiento: posiciones){
-            if (movimiento==null)
-                System.out.println(movimiento.getMovimiento());
+        ArrayList<String> posicionesStr=new ArrayList<>();//Simplemente para la impresion de estos mov como arriba
+        Soldado arriba = null,abajo=null,derecha=null,izquierda=null; 
+        if (soldadoE.getFila() != 1 && esMovimientoValido(arrL,soldadoE.getFila()-1,soldadoE.getColumna())){//arriba
+            posiciones.add(arriba);
+            posicionesStr.add("arriba");
         }
-        System.out.print("Ingrese direccion de movimiento: ");
-        
-        
+        if (soldadoE.getFila() != 10 && esMovimientoValido(arrL,soldadoE.getFila()+1,soldadoE.getColumna())){//abajo
+            posiciones.add(abajo);
+            posicionesStr.add("abajo");
+        }
+        if (soldadoE.getColumna() != 10 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()+1)){//der
+            posiciones.add(derecha);
+            posicionesStr.add("derecha");
+        }
+        if (soldadoE.getColumna() != 1 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()-1)){//izq
+            posiciones.add(izquierda);
+            posicionesStr.add("izquierda");
+        }
+        for (int i=0;i<posicionesStr.size();i++) {
+            System.out.println("NRO "+(i)+".- "+posicionesStr.get(i));
+        }
+    
+        System.out.println(">Ingrese NRO. de direccion de movimiento seleccionado: ");
+        if (sc.nextInt() >= 1 && sc.nextInt() <= posiciones.size()) {
+            
+            
+            
+        }
+        else
+            System.out.println("Número de dirección de movimiento no válido.");
+    }
+    public static boolean esMovimientoValido(ArrayList<ArrayList<Soldado>> arrL,int fila,int columna) {
+        return arrL.get(fila - 1).get(columna - 1) == null;
     }
 }
