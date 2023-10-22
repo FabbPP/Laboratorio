@@ -176,8 +176,29 @@ public class VideoJuego08 {
            if(orden.get(i).getEjercito() == 1)
                equipo1Vivo=true;
        }
-       return (equipo0Vivo || equipo1Vivo); //Si existe al menos un soldado vivo de uno de los dos ejercitos que continue 
+       if (equipo0Vivo && equipo1Vivo) //Si ambos equipos siguen manteniendo soldados continua el juego
+           return true;
+       else{  //Si un equipo se queda vacio se termina la partida
+           System.out.print("Partida terminada, ");
+           if (ganadorPartida(equipo0Vivo)==0){ //No es necesario invocar ambos booleanos segun la condicion...
+               System.out.print("la totalidad del ejercito 1, azul, del jugador 1 fue eliminado");
+               System.out.println("------> EL EJERCITO ROJO GANO <------");
+               System.out.println("------> Felicidades jugador 1! <------");
+           }
+           else { //Si gano el equipo 2
+               System.out.print("la totalidad del ejercito 0, rojo, del jugador 2 fue eliminado");
+               System.out.println("------> EL EJERCITO AZUL GANO <------");
+               System.out.println("------> Felicidades jugador 2! <------");
+           }
+           return false;
+       }          
     }   
+    public static int ganadorPartida(boolean vivo0){ //Dentro del metodo continuar solo si termina la p
+        if (vivo0=true)
+            return 0;
+        else 
+            return 1;
+    }
     public static void nuevasPosiciones(int e,ArrayList<Soldado> orden,ArrayList<ArrayList<Soldado>> arrL){
         Scanner sc=new Scanner(System.in);
         String eColor;
@@ -211,7 +232,7 @@ public class VideoJuego08 {
             posicionesStr.add("izquierda");
         for (int i=0;i<posicionesStr.size();i++) 
             System.out.println("NRO "+(i)+".- "+posicionesStr.get(i));
-        System.out.print(" >Ingrese NRO. de direccion de movimiento seleccionado: ");
+        System.out.print(" >Ingrese NRO. de direccion de movimiento seleccionada: ");
         int dNroSeleccionada = sc.nextInt();
         if (dNroSeleccionada >= 0 && dNroSeleccionada <= posicionesStr.size()) {
             String direccionElegida = posicionesStr.get(dNroSeleccionada);
@@ -236,13 +257,14 @@ public class VideoJuego08 {
             Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); //Por si se encuentra un rival en la nueva posicion
             boolean eliminado=false;
             if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
-                System.out.println("Se ha iniciado una batalla...");
-                int ganador=definirGanador(soldadoE,rival);
+                System.out.println("\t\t\t>>Se ha iniciado una batalla!!<<");
+                int ganador=definirGanadorBatalla(soldadoE,rival);
                 if (ganador==1) {// El soldado gana //metrica ya modificada intento1
                     arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE);
                     soldadoE.setFila(nuevoFil);
                     soldadoE.setColumna(nuevoCol);
-                    System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado!");
+                    soldadoE.ganarBatalla();
+                    System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado y su lugar sera ocupado!");
                 }
                 else{ // el soldado pierde
                     System.out.println("Su soldado ha perdido la batalla y ha sido eliminado.");
@@ -265,7 +287,7 @@ public class VideoJuego08 {
         Soldado soldadoEnPosicion = arrL.get(fila - 1).get(columna - 1);
         return soldadoEnPosicion == null || soldadoEnPosicion.getEjercito() != ejercito;
     }
-    public static int definirGanador(Soldado sold1,Soldado sold2){ //Devuelve el soldado ganador segun metrica
+    public static int definirGanadorBatalla(Soldado sold1,Soldado sold2){ //Devuelve el soldado ganador segun metrica
         int vidaSold1,vidaSold2;
         double total,proba1,proba2,aleat;
         vidaSold1=sold1.getVidaActual();
@@ -273,7 +295,8 @@ public class VideoJuego08 {
         total=vidaSold1+vidaSold2; //En double para que la division de probabilidad salga no entero
         proba1=vidaSold1/total;
         proba2=vidaSold2/total; //Aunque no es necesario calcularlo para definir el ganador, usado para poner el porcent
-        System.out.println("Probabilidades de vencer...\nTu soldado = "+(proba1*100)+"%\tTu rival = "+(proba2*100)+"%");
+        System.out.println("Probabilidades de vencer...\nSu soldado = "+(proba1*100)+"%\t\tSu rival = "+(proba2*100)+"%");
+        System.out.println("...de acuerdo a dichas probabilidades se decidirá el ganador aleatoriamente.\n...");
         aleat=Math.random(); //devuelve un numero aleatorio entre 0-1 (double) mas probabilidas tienen los de mayor vida
         if (aleat<=proba1)
             return 1; //Gana soldado 1 
