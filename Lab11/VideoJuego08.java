@@ -29,7 +29,7 @@ public class VideoJuego08 {
         while(continuar){
             nuevasPosiciones(0,orden,misSoldados);
             nuevasPosiciones(1,orden,misSoldados);
-            continuar();
+            continuar=continuar(orden);
         }
         System.out.println("Videojuego terminado.");
         
@@ -177,10 +177,15 @@ public class VideoJuego08 {
     else 
         return -1; // Empate
     }
-    public static boolean continuar(){
-        Scanner sc=new Scanner (System.in);
-        System.out.print("Empezara la nueva ronda de movimientos, preparados (Y/N)? : ");
-        return !sc.next().equals("N");
+    public static boolean continuar(ArrayList<Soldado> orden){ //continuen las rondas hasta que un ejercito se quede sin s
+       boolean equipo0Vivo=false,equipo1Vivo=false;
+       for(int i = 0; i < orden.size(); i++){
+           if (orden.get(i).getEjercito() == 0)
+               equipo0Vivo=true;
+           if(orden.get(i).getEjercito() == 1)
+               equipo1Vivo=true;
+       }
+       return (equipo0Vivo || equipo1Vivo); //Si existe al menos un soldado vivo de uno de los dos ejercitos que continue 
     }   
     public static void nuevasPosiciones(int e,ArrayList<Soldado> orden,ArrayList<ArrayList<Soldado>> arrL){
         Scanner sc=new Scanner(System.in);
@@ -222,7 +227,6 @@ public class VideoJuego08 {
             String direccionElegida = posicionesStr.get(dNroSeleccionada);
             int nuevoFil = fil; //Mas arriba inicializamos fil y col como posicion respectiva de soldadoE elegido
             int nuevoCol = col;
-            Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto para que no se pierda cuando lo borremos del tablero
             switch (direccionElegida){ //guardamos datos de nueva posicion para cada caso
                 case "arriba":
                     nuevoFil--;
@@ -237,20 +241,24 @@ public class VideoJuego08 {
                     nuevoCol--;
                     break;
             } 
+            Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto para que no se pierda cuando lo borremos del tablero
+            arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto en su antigua posicion
             Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); //Por si se encuentra un rival en la nueva posicion
-            if (rival != null && rival.getEjercito() != e) { //BATALLA,comprueba que si exista el rival
-                if (soldadoE.getVidaActual() > rival.getVidaActual()) {// El soldado gana
+            boolean eliminado=false;
+            if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
+                System.out.println("Se ha iniciado una batalla...");
+                if (soldadoE.getVidaActual() > rival.getVidaActual()) {// El soldado gana //MOFIDICAR
                     arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE);
                     soldadoE.setFila(nuevoFil);
                     soldadoE.setColumna(nuevoCol);
-                    System.out.println("Soldado movido a " + nuevoFil + "x" + soldadoE.getColumnaStr());
-                    System.out.println("¡El soldado de su ejercito ha ganado la batalla!");
-                } 
-                else // el soldado pierde
-                    System.out.println("El soldado de su ejercito ha perdido la batalla y ha sido eliminado.");
+                    System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado!");
+                }
+                else{ // el soldado pierde
+                    System.out.println("Su soldado ha perdido la batalla y ha sido eliminado.");
+                    eliminado=true;
+                }
             } 
-            else { //No existe un rival en la nueva posicion
-                arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto
+            if (!eliminado){ //Con tal que no haya perdido la batalla
                 arrL.get(nuevoFil-1).set(nuevoCol-1,temp); //Guardamos en la nueva posicion el soldado
                 Soldado nvPosicionSoldado=arrL.get(nuevoFil-1).get(nuevoCol-1);// Actualizamos a la nueva posicion
                 nvPosicionSoldado.setFila(nuevoFil);
@@ -258,7 +266,7 @@ public class VideoJuego08 {
                 System.out.println("Soldado movido a " + nuevoFil+"x"+soldadoE.getColumnaStr());
             }
         }
-        else
+        else //Default no valido
             System.out.println("Numero de direccion de movimiento no valido.");
         mostrarTablero(arrL);
     }
