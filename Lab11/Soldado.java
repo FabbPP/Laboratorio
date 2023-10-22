@@ -149,11 +149,7 @@ public class Soldado {
         actitud="fuga";
         velocidad += 2;
     }
-    //Metodo solo usado para posiciones
-    public void setMovimiento(String p){
-        movimiento = p;
-    }
-    public String getMovimiento(){
-        return movimiento;
+    public void ganarBatalla(){
+        vidaActual+=1;
     }
 }

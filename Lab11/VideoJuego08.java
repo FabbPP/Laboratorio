@@ -31,7 +31,7 @@ public class VideoJuego08 {
             nuevasPosiciones(1,orden,misSoldados);
             continuar=continuar(orden);
         }
-        System.out.println("Videojuego terminado.");
+        System.out.println("Partida terminada, gano...");
         
    }
     public static int nCantidadSoldados(){
@@ -124,33 +124,33 @@ public class VideoJuego08 {
         }
     }
     public static void rankingPoderBurbuja(ArrayList<Soldado> orden) {
-    ArrayList<Integer> indices = new ArrayList<>();
-    for (int i = 0; i < orden.size(); i++) {
-        indices.add(i);
-    }
+        ArrayList<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < orden.size(); i++) {
+            indices.add(i);
+        }
 
-    int temp;
-    for (int i = 0; i < orden.size() - 1; i++) {
-        for (int j = 0; j < orden.size() - i - 1; j++) {
-            if (orden.get(j) != null) {
-                int ant = orden.get(indices.get(j)).getVidaActual();
-                int pos = orden.get(indices.get(j + 1)).getVidaActual();
-                if (ant < pos) {
-                    temp = indices.get(j);
-                    indices.set(j, indices.get(j + 1));
-                    indices.set(j + 1, temp);
+        int temp;
+        for (int i = 0; i < orden.size() - 1; i++) {
+            for (int j = 0; j < orden.size() - i - 1; j++) {
+                if (orden.get(j) != null) {
+                    int ant = orden.get(indices.get(j)).getVidaActual();
+                    int pos = orden.get(indices.get(j + 1)).getVidaActual();
+                    if (ant < pos) {
+                        temp = indices.get(j);
+                        indices.set(j, indices.get(j + 1));
+                        indices.set(j + 1, temp);
+                    }
                 }
             }
         }
+        System.out.println("RANKING DE PODER POR ORDENAMIENTO BURBUJA...");
+        System.out.println("Aclaracion: ejercito 0= rojo / ejercito 1= azul");
+        for (int i = 0; i < orden.size(); i++) {
+            int index = indices.get(i);
+            Soldado soldado = orden.get(index);
+            System.out.println((i + 1) + ".- " + soldado.getNombre() + "\t salud: " + soldado.getVidaActual());
+            }
     }
-    System.out.println("RANKING DE PODER POR ORDENAMIENTO BURBUJA...");
-    for (int i = 0; i < orden.size(); i++) {
-        int index = indices.get(i);
-        Soldado soldado = orden.get(index);
-        System.out.println((i + 1) + ".- " + soldado.getNombre() + "\t salud: " + soldado.getVidaActual());
-        }
-    }
-
     public static void rankingPoderSeleccion(ArrayList<Soldado> orden){
         int n=orden.size();
         for (int i = 0; i < n - 1; i++) {
@@ -164,18 +164,9 @@ public class VideoJuego08 {
         orden.set(mayor, temp);
     }
         System.out.println("RANKING DE PODER POR ORDENAMIENTO SELECCION...");
+        System.out.println("Aclaracion: ejercito 0= rojo / ejercito 1= azul");
         for(int i=0;i<orden.size();i++)
-            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud"+orden.get(i).getVidaActual());
-    }
-    public static int definirGanador (ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden){//Tomando en cuenta el promedio de vida de c/ejercito
-        double promedioEjercito0 = promedioNivelVida(arrL,orden, 0);
-        double promedioEjercito1 = promedioNivelVida(arrL,orden, 1);
-    if (promedioEjercito0 > promedioEjercito1) 
-        return 0; // Ejército 0 gana
-    else if (promedioEjercito1 > promedioEjercito0) 
-        return 1; // Ejército 1 gana
-    else 
-        return -1; // Empate
+            System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud: "+orden.get(i).getVidaActual());
     }
     public static boolean continuar(ArrayList<Soldado> orden){ //continuen las rondas hasta que un ejercito se quede sin s
        boolean equipo0Vivo=false,equipo1Vivo=false;
@@ -220,7 +211,6 @@ public class VideoJuego08 {
             posicionesStr.add("izquierda");
         for (int i=0;i<posicionesStr.size();i++) 
             System.out.println("NRO "+(i)+".- "+posicionesStr.get(i));
-    
         System.out.print(" >Ingrese NRO. de direccion de movimiento seleccionado: ");
         int dNroSeleccionada = sc.nextInt();
         if (dNroSeleccionada >= 0 && dNroSeleccionada <= posicionesStr.size()) {
@@ -247,7 +237,8 @@ public class VideoJuego08 {
             boolean eliminado=false;
             if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
                 System.out.println("Se ha iniciado una batalla...");
-                if (soldadoE.getVidaActual() > rival.getVidaActual()) {// El soldado gana //MOFIDICAR
+                int ganador=definirGanador(soldadoE,rival);
+                if (ganador==1) {// El soldado gana //metrica ya modificada intento1
                     arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE);
                     soldadoE.setFila(nuevoFil);
                     soldadoE.setColumna(nuevoCol);
@@ -266,13 +257,28 @@ public class VideoJuego08 {
                 System.out.println("Soldado movido a " + nuevoFil+"x"+soldadoE.getColumnaStr());
             }
         }
-        else //Default no valido
+        else //Default ingreso no valido
             System.out.println("Numero de direccion de movimiento no valido.");
         mostrarTablero(arrL);
     }
-    public static boolean esMovimientoValido(ArrayList<ArrayList<Soldado>> arrL,int fila,int columna, int ejercito) {
+    public static boolean esMovimientoValido(ArrayList<ArrayList<Soldado>> arrL,int fila,int columna, int ejercito) { //Seguro
         Soldado soldadoEnPosicion = arrL.get(fila - 1).get(columna - 1);
         return soldadoEnPosicion == null || soldadoEnPosicion.getEjercito() != ejercito;
+    }
+    public static int definirGanador(Soldado sold1,Soldado sold2){ //Devuelve el soldado ganador segun metrica
+        int vidaSold1,vidaSold2;
+        double total,proba1,proba2,aleat;
+        vidaSold1=sold1.getVidaActual();
+        vidaSold2=sold2.getVidaActual();
+        total=vidaSold1+vidaSold2; //En double para que la division de probabilidad salga no entero
+        proba1=vidaSold1/total;
+        proba2=vidaSold2/total; //Aunque no es necesario calcularlo para definir el ganador, usado para poner el porcent
+        System.out.println("Probabilidades de vencer...\nTu soldado = "+(proba1*100)+"%\tTu rival = "+(proba2*100)+"%");
+        aleat=Math.random(); //devuelve un numero aleatorio entre 0-1 (double) mas probabilidas tienen los de mayor vida
+        if (aleat<=proba1)
+            return 1; //Gana soldado 1 
+        else 
+            return 2; //Gana soldado 2
     }
 }
 
