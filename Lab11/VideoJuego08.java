@@ -2,37 +2,39 @@ package Lab11;
 import java.util.*;
 public class VideoJuego08 {
     public static void main(String[] args){
-        boolean continuar=true;
-        ArrayList<ArrayList<Soldado>> misSoldados = new ArrayList<>();
-        int numFilas=10; //Inicializamos el tablero
-        int numColumnas=10;
-        for (int i=0;i<numFilas;i++) {
-            ArrayList<Soldado> fila = new ArrayList<>();
-            for (int j=0;j<numColumnas;j++) 
-                fila.add(null); //Inicializa todas las posiciones como null
-            misSoldados.add(fila);
-        }
-        ArrayList<Soldado> orden=new ArrayList<>();
-        crearSoldados(misSoldados,orden,0); //Soldados ejercito 0 rojo creados
-        crearSoldados(misSoldados,orden,1); //Soldado ejercito 1 azul creados
-        mostrarTablero(misSoldados);  
-        System.out.println("DATOS DE EJERCITO ROJO, JUGADOR 1..."); 
-        datosMayorVida(misSoldados,orden,0);  
-        System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,0)+"\n");
-        System.out.println("DATOS DE EJERCITO AZUL, JUGADOR 2...");
-        datosMayorVida(misSoldados,orden,1); 
-        System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,1)+"\n");
-        mostrarDatosOrden(misSoldados,orden); 
-        rankingPoderBurbuja(orden);
-        rankingPoderSeleccion(orden);
-        System.out.println("\t\t\tCOMENZAMOS LA BATALLA!!!"); //Inician los turnos por jugador
-        while(continuar){
-            nuevasPosiciones(0,orden,misSoldados);
-            nuevasPosiciones(1,orden,misSoldados);
-            continuar=continuar(orden);
-        }
-        System.out.println("Partida terminada, gano...");
-        
+        boolean nuevaPartida=true;
+        while(nuevaPartida){
+            ArrayList<ArrayList<Soldado>> misSoldados = new ArrayList<>();
+            int numFilas=10; //Inicializamos el tablero
+            int numColumnas=10;
+            for (int i=0;i<numFilas;i++) {
+                ArrayList<Soldado> fila = new ArrayList<>();
+                for (int j=0;j<numColumnas;j++) 
+                    fila.add(null); //Inicializa todas las posiciones como null
+                misSoldados.add(fila);
+            }
+            ArrayList<Soldado> orden=new ArrayList<>();
+            crearSoldados(misSoldados,orden,0); //Soldados ejercito 0 rojo creados
+            crearSoldados(misSoldados,orden,1); //Soldado ejercito 1 azul creados
+            mostrarTablero(misSoldados);  
+            System.out.println("DATOS DE EJERCITO ROJO, JUGADOR 1..."); 
+            datosMayorVida(misSoldados,orden,0);  
+            System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,0)+"\n");
+            System.out.println("DATOS DE EJERCITO AZUL, JUGADOR 2...");
+            datosMayorVida(misSoldados,orden,1); 
+            System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,1)+"\n");
+            mostrarDatosOrden(misSoldados,orden); 
+            rankingPoderBurbuja(orden);
+            rankingPoderSeleccion(orden);
+            System.out.println("\t\t\tCOMENZAMOS LA BATALLA!!!"); //Inician los turnos por jugador
+            boolean continuar=true;
+            while(continuar){
+                nuevasPosiciones(0,orden,misSoldados);
+                nuevasPosiciones(1,orden,misSoldados);
+                continuar=continuar(orden);
+            }
+            nuevaPartida=esIniciarNuevaPartida(); //Si resulta verdadera por la insercion Y se iniciara una nueva
+        }  
    }
     public static int nCantidadSoldados(){
         return (int)(Math.random()*10)+1;
@@ -302,6 +304,13 @@ public class VideoJuego08 {
             return 1; //Gana soldado 1 
         else 
             return 2; //Gana soldado 2
+    }
+    public static boolean esIniciarNuevaPartida(){
+        Scanner sc=new Scanner (System.in);
+        System.out.print("Desea iniciar una nueva partida (Y/N)?: ");
+        if (sc.next().equals("Y"))
+            return true;
+        return false;
     }
 }
 
