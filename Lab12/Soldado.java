@@ -1,4 +1,4 @@
-package Lab11;
+package Lab12;
 public class Soldado {
     private String nombre;
     private int ejercito;
@@ -11,7 +11,7 @@ public class Soldado {
     private int velocidad;
     private String actitud;
     private String vive;
-    private String movimiento; //Guardamos este atributo para el metodo posiciones
+    
     //Metodos constructores sobrecargados
     public Soldado(String n){  //Simula un setNombre y es el principal
         nombre=n;
