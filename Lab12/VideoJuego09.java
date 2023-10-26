@@ -8,16 +8,16 @@ public class VideoJuego09 {
                 case 1: { //Juego rapido
                     boolean nuevaPartida=true;
                     while(nuevaPartida){
-                        ArrayList<ArrayList<Lab11.Soldado>> misSoldados = new ArrayList<>(); //misSoldado es el Arreglo del tablero
+                        ArrayList<ArrayList<Soldado>> misSoldados = new ArrayList<>(); //misSoldado es el Arreglo del tablero
                         int numFilas = 10; //Inicializamos el tablero
                         int numColumnas = 10;
                         for (int i=0;i<numFilas;i++) {
-                            ArrayList<Lab11.Soldado> fila = new ArrayList<>();
+                            ArrayList<Soldado> fila = new ArrayList<>();
                             for (int j=0;j<numColumnas;j++) 
                                 fila.add(null); //Inicializa todas las posiciones como null
                             misSoldados.add(fila);
                         }
-                        ArrayList<Lab11.Soldado> orden=new ArrayList<>();
+                        ArrayList<Soldado> orden=new ArrayList<>();
                         crearSoldados(misSoldados,orden,0); //Soldados ejercito 0 rojo creados
                         crearSoldados(misSoldados,orden,1); //Soldado ejercito 1 azul creados
                         mostrarTablero(misSoldados);  
@@ -47,6 +47,7 @@ public class VideoJuego09 {
 
                 }
                 case 3:
+                   System.out.println("\t\t\tHasta luego!\n\t\t\t...saliendo del juego...");
                    noSalir = false;
                    break;
             }
@@ -57,15 +58,15 @@ public class VideoJuego09 {
         Scanner sc = new Scanner (System.in);
         System.out.println("\t\t\tBIENVENIDO AL VIDEOJUEGO");
         System.out.println("**Elija un modo de juego...\n1. Juego Rapido\t\t2. Juego Personalizado\t\t3. Salir");
-        System.out.print(">Ingrese el NRO. del modo seleccionado: ");
+        System.out.print(">Ingrese el NRO. de modo seleccionado: ");
         return sc.nextInt();
-    }
+    } //Buen funcionamiento
             
     //Metodos de juego rapido
     public static int nCantidadSoldados(){
         return (int)(Math.random()*10)+1;
     }
-    public static void crearSoldados(ArrayList<ArrayList<Lab11.Soldado>> arrL,ArrayList orden,int ejercito){
+    public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,int ejercito){
         int colStr;
         for (int i=0;i<nCantidadSoldados();i++ ){
             int fil = (int)(Math.random()*10);
@@ -74,8 +75,8 @@ public class VideoJuego09 {
                 fil = (int)(Math.random()*10);
                 col = (int)(Math.random()*10);
             }
-            Lab11.Soldado nuevoSoldado;  //
-            nuevoSoldado=new Lab11.Soldado("Soldado"+ejercito+"X"+i); //nombre asignado 
+            Soldado nuevoSoldado;  //
+            nuevoSoldado=new Soldado("Soldado"+ejercito+"X"+i); //nombre asignado 
             nuevoSoldado.Soldado(ejercito,fil+1); //ejercito, fila y luego columna asignados 
             nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
             nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
@@ -84,11 +85,11 @@ public class VideoJuego09 {
             orden.add(arrL.get(fil).get(col)); //Arreglo que guardara el ejercito ordenado por creacion
         }
     }
-    public static void mostrarTablero(ArrayList<ArrayList<Lab11.Soldado>> arrL){
+    public static void mostrarTablero(ArrayList<ArrayList<Soldado>> arrL){
         System.out.println(" A  B  C  D  E  F  G  H  I  J");
         for (int i=0;i<arrL.size(); i++){
             for (int j=0;j<arrL.get(i).size(); j++){
-                Lab11.Soldado posicion=arrL.get(i).get(j);
+                Soldado posicion=arrL.get(i).get(j);
                 if (posicion!=null){
                     String color = (posicion.getEjercito() == 0) ? "\u001B[31m" : "\u001B[34m"; // Rojo o Azul
                     System.out.print(color + "|" + posicion.getVidaActual() + "|" + "\u001B[0m"); // Restaura el color original
@@ -99,8 +100,8 @@ public class VideoJuego09 {
             System.out.println(); 
         }
     }
-    public static void mostrarDatos(ArrayList<ArrayList<Lab11.Soldado>> arrL,int i,int j){
-        Lab11.Soldado posicion=arrL.get(i).get(j);
+    public static void mostrarDatos(ArrayList<ArrayList<Soldado>> arrL,int i,int j){
+        Soldado posicion=arrL.get(i).get(j);
         System.out.println("  Nombre: "+ posicion.getNombre());
         System.out.println("  Ejercito: "+posicion.getEjercito());
         System.out.println("  Fila: "+ posicion.getFila());
@@ -112,13 +113,13 @@ public class VideoJuego09 {
         System.out.println("  Actitud: "+ posicion.getActitud());
         System.out.println("  Vive: "+ posicion.getVive()+"\n");
     }
-    public static void datosMayorVida(ArrayList<ArrayList<Lab11.Soldado>> arrL,ArrayList<Lab11.Soldado> orden,int ejercito){
+    public static void datosMayorVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,int ejercito){
         System.out.println("-Datos de soldado con mayor vida: ");
         int maxI = 0,maxJ = 0,mayorNivelV = 0;
         for(int i=0;i<orden.size();i++){
             int fil=orden.get(i).getFila()-1;
             int col=orden.get(i).getColumna()-1;
-            Lab11.Soldado posicion=arrL.get(fil).get(col);
+            Soldado posicion=arrL.get(fil).get(col);
             if (posicion.getEjercito()==ejercito){
                 if (mayorNivelV<posicion.getVidaActual()){
                     mayorNivelV=posicion.getVidaActual();
@@ -129,18 +130,18 @@ public class VideoJuego09 {
         }
         mostrarDatos(arrL,maxI,maxJ);
     }
-    public static double promedioNivelVida(ArrayList<ArrayList<Lab11.Soldado>> arrL,ArrayList<Lab11.Soldado> orden,int ejercito){
+    public static double promedioNivelVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,int ejercito){
         double sumVida = 0;
         for(int i=0;i<orden.size();i++){
             int fil = orden.get(i).getFila()-1;
             int col = orden.get(i).getColumna()-1;
-            Lab11.Soldado posicion=arrL.get(fil).get(col);
+            Soldado posicion=arrL.get(fil).get(col);
             if(posicion.getEjercito()==ejercito)
                 sumVida+=posicion.getVidaActual();
         }
         return sumVida/orden.size();
     }
-    public static void mostrarDatosOrden(ArrayList<ArrayList<Lab11.Soldado>> arrL,ArrayList<Lab11.Soldado> orden){
+    public static void mostrarDatosOrden(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden){
         System.out.println("DATOS DEL EJERCITO EN EL ORDEN DE CREACION...");
         for(int i=0;i<orden.size();i++){
             if(orden.get(i).getEjercito()==0)
@@ -151,7 +152,7 @@ public class VideoJuego09 {
                 mostrarDatos(arrL,(orden.get(i).getFila())-1,(orden.get(i).getColumna())-1);
         }
     }
-    public static void rankingPoderBurbuja(ArrayList<Lab11.Soldado> orden) {
+    public static void rankingPoderBurbuja(ArrayList<Soldado> orden) {
         ArrayList<Integer> indices = new ArrayList<>();
         for (int i = 0; i < orden.size(); i++) {
             indices.add(i);
@@ -175,11 +176,11 @@ public class VideoJuego09 {
         System.out.println("Aclaracion: ejercito 0 (rojo) / ejercito 1 (azul)");
         for (int i = 0; i < orden.size(); i++) {
             int index = indices.get(i);
-            Lab11.Soldado soldado = orden.get(index);
+            Soldado soldado = orden.get(index);
             System.out.println((i + 1) + ".- " + soldado.getNombre() + "\t salud: " + soldado.getVidaActual());
             }
     }
-    public static void rankingPoderSeleccion(ArrayList<Lab11.Soldado> orden){
+    public static void rankingPoderSeleccion(ArrayList<Soldado> orden){
         int n=orden.size();
         for (int i = 0; i < n - 1; i++) {
             int mayor=i;
@@ -187,7 +188,7 @@ public class VideoJuego09 {
                 if (orden.get(j).getVidaActual() > orden.get(mayor).getVidaActual()) 
                     mayor = j;     
         }
-        Lab11.Soldado temp = orden.get(i);
+        Soldado temp = orden.get(i);
         orden.set(i, orden.get(mayor));
         orden.set(mayor, temp);
     }
@@ -196,7 +197,7 @@ public class VideoJuego09 {
         for(int i=0;i<orden.size();i++)
             System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud: "+orden.get(i).getVidaActual());
     }
-    public static boolean continuar(ArrayList<Lab11.Soldado> orden){ //ERROR //continuen las rondas hasta que un ejercito se quede sin s
+    public static boolean continuar(ArrayList<Soldado> orden){ //ERROR //continuen las rondas hasta que un ejercito se quede sin s
        boolean equipo0Vivo = false, equipo1Vivo = false;
        for(int i = 0; i < orden.size(); i++){
            if (orden.get(i).getEjercito() == 0)
@@ -208,12 +209,12 @@ public class VideoJuego09 {
            return true;
        System.out.print("Partida terminada, ");
        if (equipo0Vivo){ //No es necesario invocar ambos booleanos segun la condicion...
-           System.out.print("la totalidad del ejercito azul 1, del jugador 1 fue eliminado");
+           System.out.println("la totalidad del ejercito 1 azul, del jugador 1 fue eliminado");
            System.out.println("------> EL EJERCITO ROJO GANO <------");
            System.out.println("------> Felicidades jugador 1! <------");
        }
        else { //Si gano el equipo 2
-           System.out.print("la totalidad del ejercito rojo 0, del jugador 2 fue eliminado");
+           System.out.println("la totalidad del ejercito 0 rojo, del jugador 2 fue eliminado");
            System.out.println("------> EL EJERCITO AZUL GANO <------");
            System.out.println("------> Felicidades jugador 2! <------");
        }
@@ -225,7 +226,7 @@ public class VideoJuego09 {
             return 0;
         return 1;
     } 
-    public static void nuevasPosiciones(int e,ArrayList<Lab11.Soldado> orden,ArrayList<ArrayList<Lab11.Soldado>> arrL){
+    public static void nuevasPosiciones(int e,ArrayList<Soldado> orden,ArrayList<ArrayList<Soldado>> arrL){
         Scanner sc=new Scanner(System.in);
         String eColor;
         if (e == 0)
@@ -236,13 +237,14 @@ public class VideoJuego09 {
         System.out.println("**Elija un soldado de su Ejercito "+e+" "+eColor); //Se mostrara la lista de Soldados de su ejercito
         for(int i=0;i<orden.size();i++){
             if(orden.get(i).getEjercito()==e){
-                Lab11.Soldado posicion=orden.get(i);
+                Soldado posicion=orden.get(i);
                 System.out.println("NRO "+i+". "+posicion.getNombre()+": ");
                 System.out.println("  posicion: "+posicion.getFila()+"x"+posicion.getColumnaStr());
             }
         }
         System.out.print(" >Ingrese NRO. de soldado seleccionado: ");
-        Lab11.Soldado soldadoE=orden.get(sc.nextInt());
+        int numCreacion=sc.nextInt();
+        Soldado soldadoE=orden.get(numCreacion);
         int fil = soldadoE.getFila();
         int col = soldadoE.getColumna(); //En modo numero para poder ubicarla en el tablero usando arr orden
         System.out.println("Soldado ubicado "+fil+"x"+soldadoE.getColumnaStr());
@@ -278,28 +280,30 @@ public class VideoJuego09 {
                     nuevoCol--;
                     break;
             } 
-            Lab11.Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto para que no se pierda cuando lo borremos del tablero
-            arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto en su antigua posicion
-            Lab11.Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); //Por si se encuentra un rival en la nueva posicion
-            boolean eliminado=false;
+            Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto para que no se pierda cuando lo borremos del tablero
+            arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto en su antigua posicion si pierde lo dejamos asi
+            Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); // Si se encuentra un rival en la nueva posicion
+            boolean miSoldadoeliminado=false;
             if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
-                System.out.println("\t\t\t>>Se ha iniciado una batalla!!<<");
-                int ganador=definirGanadorBatalla(soldadoE,rival);
-                if (ganador==1) {// El soldado gana //metrica ya modificada intento1
-                    arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE);
-                    soldadoE.setFila(nuevoFil);
+                System.out.println("\t\t\t>>Se ha iniciado una batalla !!<<");
+                int ganador = definirGanadorBatalla(soldadoE,rival);
+                if (ganador==1) {// El soldado gana 
+                    soldadoE.setFila(nuevoFil); //Actualizando datos de la lista orden
                     soldadoE.setColumna(nuevoCol);
                     soldadoE.ganarBatalla();
+                    arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE); 
+                    orden.remove(rival);
                     System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado y su lugar sera ocupado!");
                 }
                 else{ // el soldado pierde
+                    orden.remove(numCreacion); //Borra el soldado de la lista de soldados
                     System.out.println("Su soldado ha perdido la batalla y ha sido eliminado.");
-                    eliminado=true;
+                    miSoldadoeliminado=true; //Ya no se recuperara la info de este soldado 
                 }
-            } 
-            if (!eliminado){ //Con tal que no haya perdido la batalla
+            } //SI solo si hay rival y gano o no hay rival y se posicionara
+            if (!miSoldadoeliminado){ //Con tal que no haya perdido en caso haya rival,guardamos nueva posicion en el tablero arreglo
                 arrL.get(nuevoFil-1).set(nuevoCol-1,temp); //Guardamos en la nueva posicion el soldado
-                Lab11.Soldado nvPosicionSoldado=arrL.get(nuevoFil-1).get(nuevoCol-1);// Actualizamos a la nueva posicion
+                Soldado nvPosicionSoldado = arrL.get(nuevoFil-1).get(nuevoCol-1);// Actualizamos a la nueva posicion
                 nvPosicionSoldado.setFila(nuevoFil);
                 nvPosicionSoldado.setColumna(nuevoCol);
                 System.out.println("Soldado movido a " + nuevoFil+"x"+soldadoE.getColumnaStr());
@@ -308,12 +312,12 @@ public class VideoJuego09 {
         else //Default ingreso no valido
             System.out.println("Numero de direccion de movimiento no valido.");
         mostrarTablero(arrL);
-    }
-    public static boolean esMovimientoValido(ArrayList<ArrayList<Lab11.Soldado>> arrL,int fila,int columna, int ejercito) { //Seguro
-        Lab11.Soldado soldadoEnPosicion = arrL.get(fila - 1).get(columna - 1);
+    }//bien
+    public static boolean esMovimientoValido(ArrayList<ArrayList<Soldado>> arrL,int fila,int columna, int ejercito) { //Seguro
+        Soldado soldadoEnPosicion = arrL.get(fila - 1).get(columna - 1);
         return soldadoEnPosicion == null || soldadoEnPosicion.getEjercito() != ejercito;
     }
-    public static int definirGanadorBatalla(Lab11.Soldado sold1,Lab11.Soldado sold2){ //Devuelve el soldado ganador segun metrica
+    public static int definirGanadorBatalla(Soldado sold1,Soldado sold2){ //Devuelve el soldado ganador segun metrica
         int vidaSold1,vidaSold2;
         double total,proba1,proba2,aleat;
         vidaSold1=sold1.getVidaActual();
@@ -321,19 +325,18 @@ public class VideoJuego09 {
         total=vidaSold1+vidaSold2; //En double para que la division de probabilidad salga no entero
         proba1=vidaSold1/total;
         proba2=vidaSold2/total; //Aunque no es necesario calcularlo para definir el ganador, usado para poner el porcent
-        System.out.println("Probabilidades de vencer...\nSu soldado = "+(proba1*100)+"%\t/ Su rival = "+(proba2*100)+"%");
-        System.out.println("de acuerdo a dichas probabilidades se decidira el ganador aleatoriamente.\n...");
+        System.out.println("*Probabilidades de vencer...\nSu soldado = "+(proba1*100)+"%\t/\tSu rival = "+(proba2*100)+"%");
+        System.out.println("---> De acuerdo a dichas probabilidades se decidira el ganador aleatoriamente.\n...");
         aleat=Math.random(); //devuelve un numero aleatorio entre 0-1 (double) mas probabilidas tienen los de mayor vida
         if (aleat<=proba1)
             return 1; //Gana soldado 1 
         else 
             return 2; //Gana soldado 2
     } //bien
-    public static boolean esIniciarNuevaPartida(){
+    public static boolean esIniciarNuevaPartida(){ //Ingreso de menu luego de partida terminada
         Scanner sc=new Scanner (System.in);
-        System.out.print("**Elija una accion...\n1. Volver a jugar\t\t2. Volver al menu principal ");
-        if (sc.nextInt()==1)
-            return true;
-        return false;
+        System.out.println("**Elija una accion...\n1. Volver a jugar\t\t2. Volver al menu principal ");
+        System.out.print(">Ingrese NRO de accion seleccionada: ");
+        return sc.nextInt()==1;
     } 
 }
