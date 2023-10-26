@@ -2,41 +2,66 @@ package Lab12;
 import java.util.*;
 public class VideoJuego09 {
     public static void main(String[] args){
-        boolean nuevaPartida=true;
-        while(nuevaPartida){
-            ArrayList<ArrayList<Lab11.Soldado>> misSoldados = new ArrayList<>(); //misSoldado es el Arreglo del tablero
-            int numFilas=10; //Inicializamos el tablero
-            int numColumnas=10;
-            for (int i=0;i<numFilas;i++) {
-                ArrayList<Lab11.Soldado> fila = new ArrayList<>();
-                for (int j=0;j<numColumnas;j++) 
-                    fila.add(null); //Inicializa todas las posiciones como null
-                misSoldados.add(fila);
+        boolean noSalir = true;
+        while (noSalir) {
+            switch (menu1()){
+                case 1: { //Juego rapido
+                    boolean nuevaPartida=true;
+                    while(nuevaPartida){
+                        ArrayList<ArrayList<Lab11.Soldado>> misSoldados = new ArrayList<>(); //misSoldado es el Arreglo del tablero
+                        int numFilas = 10; //Inicializamos el tablero
+                        int numColumnas = 10;
+                        for (int i=0;i<numFilas;i++) {
+                            ArrayList<Lab11.Soldado> fila = new ArrayList<>();
+                            for (int j=0;j<numColumnas;j++) 
+                                fila.add(null); //Inicializa todas las posiciones como null
+                            misSoldados.add(fila);
+                        }
+                        ArrayList<Lab11.Soldado> orden=new ArrayList<>();
+                        crearSoldados(misSoldados,orden,0); //Soldados ejercito 0 rojo creados
+                        crearSoldados(misSoldados,orden,1); //Soldado ejercito 1 azul creados
+                        mostrarTablero(misSoldados);  
+                        System.out.println("DATOS DE EJERCITO ROJO, JUGADOR 1..."); 
+                        datosMayorVida(misSoldados,orden,0);  
+                        System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,0)+"\n");
+                        System.out.println("DATOS DE EJERCITO AZUL, JUGADOR 2...");
+                        datosMayorVida(misSoldados,orden,1); 
+                        System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,1)+"\n");
+                        mostrarDatosOrden(misSoldados,orden); 
+                        rankingPoderBurbuja(orden);
+                        rankingPoderSeleccion(orden);
+                        System.out.println("\t\t\tCOMENZAMOS LA BATALLA!!!"); //Inician los turnos por jugador
+                        mostrarTablero(misSoldados);
+                        boolean continuar=true;
+                        while(continuar){
+                            nuevasPosiciones(0,orden,misSoldados);
+                            nuevasPosiciones(1,orden,misSoldados);
+                            continuar=continuar(orden);
+                        }
+                        nuevaPartida=esIniciarNuevaPartida(); //Si resulta verdadera por la insercion Y se iniciara una nueva
+                    }
+                    break;
+                }
+                case 2:{
+                    break;
+
+                }
+                case 3:
+                   noSalir = false;
+                   break;
             }
-            ArrayList<Lab11.Soldado> orden=new ArrayList<>();
-            crearSoldados(misSoldados,orden,0); //Soldados ejercito 0 rojo creados
-            crearSoldados(misSoldados,orden,1); //Soldado ejercito 1 azul creados
-            mostrarTablero(misSoldados);  
-            System.out.println("DATOS DE EJERCITO ROJO, JUGADOR 1..."); 
-            datosMayorVida(misSoldados,orden,0);  
-            System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,0)+"\n");
-            System.out.println("DATOS DE EJERCITO AZUL, JUGADOR 2...");
-            datosMayorVida(misSoldados,orden,1); 
-            System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(misSoldados,orden,1)+"\n");
-            mostrarDatosOrden(misSoldados,orden); 
-            rankingPoderBurbuja(orden);
-            rankingPoderSeleccion(orden);
-            System.out.println("\t\t\tCOMENZAMOS LA BATALLA!!!"); //Inician los turnos por jugador
-            mostrarTablero(misSoldados);
-            boolean continuar=true;
-            while(continuar){
-                nuevasPosiciones(0,orden,misSoldados);
-                nuevasPosiciones(1,orden,misSoldados);
-                continuar=continuar(orden);
-            }
-            nuevaPartida=esIniciarNuevaPartida(); //Si resulta verdadera por la insercion Y se iniciara una nueva
-        }  
+        } 
    }
+    //Metodos de menu
+    public static int menu1(){ //Eleccion de modos de juego
+        Scanner sc = new Scanner (System.in);
+        System.out.println("\t\t\tBIENVENIDO AL VIDEOJUEGO");
+        System.out.println("**Elija un modo de juego...\n1. Juego Rapido\t\t2. Juego Personalizado\t\t3. Salir");
+        System.out.print(">Ingrese el NRO. del modo seleccionado: ");
+        return sc.nextInt();
+    }
+            
+    //Metodos de juego rapido
     public static int nCantidadSoldados(){
         return (int)(Math.random()*10)+1;
     }
@@ -171,36 +196,35 @@ public class VideoJuego09 {
         for(int i=0;i<orden.size();i++)
             System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud: "+orden.get(i).getVidaActual());
     }
-    public static boolean continuar(ArrayList<Lab11.Soldado> orden){ //continuen las rondas hasta que un ejercito se quede sin s
-       boolean equipo0Vivo=false,equipo1Vivo=false;
+    public static boolean continuar(ArrayList<Lab11.Soldado> orden){ //ERROR //continuen las rondas hasta que un ejercito se quede sin s
+       boolean equipo0Vivo = false, equipo1Vivo = false;
        for(int i = 0; i < orden.size(); i++){
            if (orden.get(i).getEjercito() == 0)
-               equipo0Vivo=true;
+               equipo0Vivo = true;
            if(orden.get(i).getEjercito() == 1)
-               equipo1Vivo=true;
+               equipo1Vivo = true;
        }
-       if (equipo0Vivo && equipo1Vivo) //Si ambos equipos siguen manteniendo soldados continua el juego
+       if (equipo0Vivo && equipo1Vivo) //ambos equipos siguen manteniendo soldados continua el juego
            return true;
-       else{  //Si un equipo se queda vacio se termina la partida
-           System.out.print("Partida terminada, ");
-           if (ganadorPartida(equipo0Vivo)==0){ //No es necesario invocar ambos booleanos segun la condicion...
-               System.out.print("la totalidad del ejercito azul 1, del jugador 1 fue eliminado");
-               System.out.println("------> EL EJERCITO ROJO GANO <------");
-               System.out.println("------> Felicidades jugador 1! <------");
-           }
-           else { //Si gano el equipo 2
-               System.out.print("la totalidad del ejercito rojo 0, del jugador 2 fue eliminado");
-               System.out.println("------> EL EJERCITO AZUL GANO <------");
-               System.out.println("------> Felicidades jugador 2! <------");
-           }
-           return false;
-       }          
+       System.out.print("Partida terminada, ");
+       if (equipo0Vivo){ //No es necesario invocar ambos booleanos segun la condicion...
+           System.out.print("la totalidad del ejercito azul 1, del jugador 1 fue eliminado");
+           System.out.println("------> EL EJERCITO ROJO GANO <------");
+           System.out.println("------> Felicidades jugador 1! <------");
+       }
+       else { //Si gano el equipo 2
+           System.out.print("la totalidad del ejercito rojo 0, del jugador 2 fue eliminado");
+           System.out.println("------> EL EJERCITO AZUL GANO <------");
+           System.out.println("------> Felicidades jugador 2! <------");
+       }
+       return false;
+                 
     }   
     public static int ganadorPartida(boolean vivo0){ //Dentro del metodo continuar solo si termina un equipo sin jugadores
         if (vivo0=true)
             return 0;
         return 1;
-    }
+    } 
     public static void nuevasPosiciones(int e,ArrayList<Lab11.Soldado> orden,ArrayList<ArrayList<Lab11.Soldado>> arrL){
         Scanner sc=new Scanner(System.in);
         String eColor;
@@ -297,18 +321,18 @@ public class VideoJuego09 {
         total=vidaSold1+vidaSold2; //En double para que la division de probabilidad salga no entero
         proba1=vidaSold1/total;
         proba2=vidaSold2/total; //Aunque no es necesario calcularlo para definir el ganador, usado para poner el porcent
-        System.out.println("Probabilidades de vencer...\nSu soldado = "+(proba1*100)+"%\t\tSu rival = "+(proba2*100)+"%");
-        System.out.println("...de acuerdo a dichas probabilidades se decidirá el ganador aleatoriamente.\n...");
+        System.out.println("Probabilidades de vencer...\nSu soldado = "+(proba1*100)+"%\t/ Su rival = "+(proba2*100)+"%");
+        System.out.println("de acuerdo a dichas probabilidades se decidira el ganador aleatoriamente.\n...");
         aleat=Math.random(); //devuelve un numero aleatorio entre 0-1 (double) mas probabilidas tienen los de mayor vida
         if (aleat<=proba1)
             return 1; //Gana soldado 1 
         else 
             return 2; //Gana soldado 2
-    }
+    } //bien
     public static boolean esIniciarNuevaPartida(){
         Scanner sc=new Scanner (System.in);
-        System.out.print("Volver a jugar(Y/N)?: ");
-        if (sc.next().equals("Y"))
+        System.out.print("**Elija una accion...\n1. Volver a jugar\t\t2. Volver al menu principal ");
+        if (sc.nextInt()==1)
             return true;
         return false;
     } 
