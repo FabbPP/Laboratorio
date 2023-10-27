@@ -87,10 +87,10 @@ public class VideoJuego09 {
     }
     public static void mostrarTablero(ArrayList<ArrayList<Soldado>> arrL){
         System.out.println(" A  B  C  D  E  F  G  H  I  J");
-        for (int i=0;i<arrL.size(); i++){
-            for (int j=0;j<arrL.get(i).size(); j++){
-                Soldado posicion=arrL.get(i).get(j);
-                if (posicion!=null){
+        for (int i = 0; i < arrL.size(); i++){
+            for (int j = 0; j < arrL.get(i).size(); j++){
+                Soldado posicion = arrL.get(i).get(j);
+                if (posicion != null){
                     String color = (posicion.getEjercito() == 0) ? "\u001B[31m" : "\u001B[34m"; // Rojo o Azul
                     System.out.print(color + "|" + posicion.getVidaActual() + "|" + "\u001B[0m"); // Restaura el color original
                 }
@@ -101,7 +101,7 @@ public class VideoJuego09 {
         }
     }
     public static void mostrarDatos(ArrayList<ArrayList<Soldado>> arrL,int i,int j){
-        Soldado posicion=arrL.get(i).get(j);
+        Soldado posicion = arrL.get(i).get(j);
         System.out.println("  Nombre: "+ posicion.getNombre());
         System.out.println("  Ejercito: "+posicion.getEjercito());
         System.out.println("  Fila: "+ posicion.getFila());
@@ -116,15 +116,15 @@ public class VideoJuego09 {
     public static void datosMayorVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,int ejercito){
         System.out.println("-Datos de soldado con mayor vida: ");
         int maxI = 0,maxJ = 0,mayorNivelV = 0;
-        for(int i=0;i<orden.size();i++){
-            int fil=orden.get(i).getFila()-1;
-            int col=orden.get(i).getColumna()-1;
+        for(int i = 0; i < orden.size(); i++){
+            int fil = orden.get(i).getFila()-1;
+            int col = orden.get(i).getColumna()-1;
             Soldado posicion=arrL.get(fil).get(col);
             if (posicion.getEjercito()==ejercito){
                 if (mayorNivelV<posicion.getVidaActual()){
                     mayorNivelV=posicion.getVidaActual();
-                    maxI=fil;
-                    maxJ=col;
+                    maxI = fil;
+                    maxJ = col;
                 }
             }
         }
@@ -132,7 +132,7 @@ public class VideoJuego09 {
     }
     public static double promedioNivelVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,int ejercito){
         double sumVida = 0;
-        for(int i=0;i<orden.size();i++){
+        for(int i = 0; i < orden.size(); i ++){
             int fil = orden.get(i).getFila()-1;
             int col = orden.get(i).getColumna()-1;
             Soldado posicion=arrL.get(fil).get(col);
@@ -143,12 +143,12 @@ public class VideoJuego09 {
     }
     public static void mostrarDatosOrden(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden){
         System.out.println("DATOS DEL EJERCITO EN EL ORDEN DE CREACION...");
-        for(int i=0;i<orden.size();i++){
+        for(int i = 0; i < orden.size(); i ++){
             if(orden.get(i).getEjercito()==0)
                 System.out.println("-Ejercito 0...");
             else 
                 System.out.println("-Ejercito 1...");
-            if(orden.get(i)!=null)
+            if(orden.get(i) != null)
                 mostrarDatos(arrL,(orden.get(i).getFila())-1,(orden.get(i).getColumna())-1);
         }
     }
@@ -249,68 +249,74 @@ public class VideoJuego09 {
         int col = soldadoE.getColumna(); //En modo numero para poder ubicarla en el tablero usando arr orden
         System.out.println("Soldado ubicado "+fil+"x"+soldadoE.getColumnaStr());
         System.out.println("**Elija una de las direcciones de movimiento disponibles...");
-        ArrayList<String> posicionesStr=new ArrayList<>();//Simplemente para la impresion de estos mov como arriba
-        if (soldadoE.getFila() != 1 && esMovimientoValido(arrL,soldadoE.getFila()-1,soldadoE.getColumna(),e))//arriba
+        ArrayList<String> posicionesStr = new ArrayList<>();//movimientos
+        ArrayList<String> letrasPosicion = new ArrayList<>(); //letras accedoras a movimiento a  s  d  w
+        if (soldadoE.getFila() != 1 && esMovimientoValido(arrL,soldadoE.getFila()-1,soldadoE.getColumna(),e)){//arriba
             posicionesStr.add("arriba");
-        if (soldadoE.getFila() != 10 && esMovimientoValido(arrL,soldadoE.getFila()+1,soldadoE.getColumna(),e))//abajo
-            posicionesStr.add("abajo");
-        if (soldadoE.getColumna() != 10 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()+1,e))//der
-            posicionesStr.add("derecha");
-        if (soldadoE.getColumna() != 1 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()-1,e))//izq
-            posicionesStr.add("izquierda");
-        for (int i=0;i<posicionesStr.size();i++) 
-            System.out.println("NRO "+(i)+".- "+posicionesStr.get(i));
-        System.out.print(" >Ingrese NRO. de direccion de movimiento seleccionada: ");
-        int dNroSeleccionada = sc.nextInt();
-        if (dNroSeleccionada >= 0 && dNroSeleccionada <= posicionesStr.size()) {
-            String direccionElegida = posicionesStr.get(dNroSeleccionada);
-            int nuevoFil = fil; //Mas arriba inicializamos fil y col como posicion respectiva de soldadoE elegido
-            int nuevoCol = col;
-            switch (direccionElegida){ //guardamos datos de nueva posicion para cada caso
-                case "arriba":
-                    nuevoFil--;
-                    break;
-                case "abajo":
-                    nuevoFil++;
-                    break;
-                case "derecha":
-                    nuevoCol++;
-                    break;
-                case "izquierda":
-                    nuevoCol--;
-                    break;
-            } 
-            Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto para que no se pierda cuando lo borremos del tablero
-            arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto en su antigua posicion si pierde lo dejamos asi
-            Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); // Si se encuentra un rival en la nueva posicion
-            boolean miSoldadoeliminado=false;
-            if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
-                System.out.println("\t\t\t>>Se ha iniciado una batalla !!<<");
-                int ganador = definirGanadorBatalla(soldadoE,rival);
-                if (ganador==1) {// El soldado gana 
-                    soldadoE.setFila(nuevoFil); //Actualizando datos de la lista orden
-                    soldadoE.setColumna(nuevoCol);
-                    soldadoE.ganarBatalla();
-                    arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE); 
-                    orden.remove(rival);
-                    System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado y su lugar sera ocupado!");
-                }
-                else{ // el soldado pierde
-                    orden.remove(numCreacion); //Borra el soldado de la lista de soldados
-                    System.out.println("Su soldado ha perdido la batalla y ha sido eliminado.");
-                    miSoldadoeliminado=true; //Ya no se recuperara la info de este soldado 
-                }
-            } //SI solo si hay rival y gano o no hay rival y se posicionara
-            if (!miSoldadoeliminado){ //Con tal que no haya perdido en caso haya rival,guardamos nueva posicion en el tablero arreglo
-                arrL.get(nuevoFil-1).set(nuevoCol-1,temp); //Guardamos en la nueva posicion el soldado
-                Soldado nvPosicionSoldado = arrL.get(nuevoFil-1).get(nuevoCol-1);// Actualizamos a la nueva posicion
-                nvPosicionSoldado.setFila(nuevoFil);
-                nvPosicionSoldado.setColumna(nuevoCol);
-                System.out.println("Soldado movido a " + nuevoFil+"x"+soldadoE.getColumnaStr());
-            }
+            letrasPosicion.add("W");
         }
-        else //Default ingreso no valido
-            System.out.println("Numero de direccion de movimiento no valido.");
+        if (soldadoE.getFila() != 10 && esMovimientoValido(arrL,soldadoE.getFila()+1,soldadoE.getColumna(),e)){//abajo
+            posicionesStr.add("abajo");
+            letrasPosicion.add("S");
+        }
+        if (soldadoE.getColumna() != 10 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()+1,e)){//der
+            posicionesStr.add("derecha");
+            letrasPosicion.add("D");
+        }
+        if (soldadoE.getColumna() != 1 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()-1,e)){//izq
+            posicionesStr.add("izquierda");
+            letrasPosicion.add("A");
+        }
+        for (int i=0;i<posicionesStr.size();i++) 
+            System.out.println(letrasPosicion.get(i)+".- "+posicionesStr.get(i));
+        System.out.print(" >Ingrese LETRA de la direccion de movimiento seleccionada: ");
+        String letra = sc.next();
+        String direccionElegida = posicionesStr.get(letrasPosicion.indexOf(letra));
+        int nuevoFil = fil; //Mas arriba inicializamos fil y col como posicion respectiva de soldadoE elegido
+        int nuevoCol = col;
+        switch (direccionElegida){ //guardamos datos de nueva posicion para cada caso
+            case "arriba":
+                nuevoFil--;
+                break;
+            case "abajo":
+                nuevoFil++;
+                break;
+            case "derecha":
+                nuevoCol++;
+                break;
+            case "izquierda":
+                nuevoCol--;
+                break;
+        } 
+        Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto para que no se pierda cuando lo borremos del tablero
+        arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto en su antigua posicion si pierde lo dejamos asi
+        Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); // Si se encuentra un rival en la nueva posicion
+        boolean miSoldadoeliminado=false;
+        if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
+            System.out.println("\t\t\t>>Se ha iniciado una batalla !!<<");
+            int ganador = definirGanadorBatalla(soldadoE,rival);
+            if (ganador==1) {// El soldado gana 
+                soldadoE.setFila(nuevoFil); //Actualizando datos de la lista orden
+                soldadoE.setColumna(nuevoCol);
+                soldadoE.ganarBatalla();
+                arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE); 
+                orden.remove(rival);
+                System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado y su lugar sera ocupado!");
+                System.out.println("Ademas, su soldado gano 1 pto. mas de vida");
+            }
+            else{ // el soldado pierde
+                orden.remove(numCreacion); //Borra el soldado de la lista de soldados
+                System.out.println("Su soldado ha perdido la batalla y ha sido eliminado.");
+                miSoldadoeliminado=true; //Ya no se recuperara la info de este soldado 
+            }
+        } //SI solo si hay rival y gano o no hay rival y se posicionara
+        if (!miSoldadoeliminado){ //Con tal que no haya perdido en caso haya rival,guardamos nueva posicion en el tablero arreglo
+            arrL.get(nuevoFil-1).set(nuevoCol-1,temp); //Guardamos en la nueva posicion el soldado
+            Soldado nvPosicionSoldado = arrL.get(nuevoFil-1).get(nuevoCol-1);// Actualizamos a la nueva posicion
+            nvPosicionSoldado.setFila(nuevoFil);
+            nvPosicionSoldado.setColumna(nuevoCol);
+            System.out.println("Soldado movido a " + nuevoFil+"x"+soldadoE.getColumnaStr());
+        }
         mostrarTablero(arrL);
     }//bien
     public static boolean esMovimientoValido(ArrayList<ArrayList<Soldado>> arrL,int fila,int columna, int ejercito) { //Seguro
@@ -338,5 +344,5 @@ public class VideoJuego09 {
         System.out.println("**Elija una accion...\n1. Volver a jugar\t\t2. Volver al menu principal ");
         System.out.print(">Ingrese NRO de accion seleccionada: ");
         return sc.nextInt()==1;
-    } 
+    } //bien
 }
