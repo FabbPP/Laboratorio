@@ -1,5 +1,9 @@
 package Lab13;
 public class Soldado {
+    public static final int MAX_CANTIDAD = 10;//Constante de Clase
+    private static int cantidadTotal = 0; //Variable de Clase
+    private static int cantidadEjercito0 = 0;  //Varianle de Clase 
+    private static int cantidadEjercito1 = 0;  //Variable de Clase 
     private String nombre;
     private int ejercito;
     private int fila;
@@ -12,13 +16,29 @@ public class Soldado {
     private String actitud;
     private String vive;
     
-    //Metodos constructores sobrecargados
+    //Constructor sobrecargados
     public Soldado(String n){  //Simula un setNombre y es el principal
         nombre=n;
+        cantidadTotal += 1;
     }
-    public void Soldado(int e,int f){ //Simula un setEjercito y setFila
+    //Metodos de clase
+    public static int getCantidadTotal(){
+        return cantidadTotal;
+    }
+    public static int getCantidadEjercito0(){
+        return cantidadEjercito0;
+    }
+    public static int getCantidadEjercito1(){
+        return cantidadEjercito1;
+    }
+    //Metodos de instancia
+    public void soldadoEF (int e,int f){ //Simula un setEjercito y setFila //VARIABLE DE CLASE
         ejercito=e;
         fila=f;
+        if (ejercito == 0)
+            cantidadEjercito0 += 1;
+        else
+            cantidadEjercito1 += 1;
     }
     public void Soldado(int nA,int nD,int v,String a,boolean vi){
         nivelAtaque=nA;   //Inicializa por defecto los valores predeterminados
@@ -142,8 +162,13 @@ public class Soldado {
         if (vidaActual == 0)
             morir();
     }
-    public void morir(){
+    public void morir(){ //Contiene algunas variables de clase
         vive = "no";
+        cantidadTotal -= 1;
+        if (ejercito==0)
+            cantidadEjercito0 -= 1;
+        else 
+            cantidadEjercito1 -= 1;
     }
     public void huir(){
         actitud="fuga";

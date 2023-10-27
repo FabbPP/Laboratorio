@@ -24,7 +24,7 @@ public class VideoJuego10 {
                     }
                     break;
                 }
-                case 2:{ //Juego personalizada, permite gestionar ejercitos
+                case 2:{ //Juego personalizado, permite gestionar ejercitos
                     inicializarTablero(misSoldados);
                     crearSoldados(misSoldados,orden,0); //Soldados ejercito 0 rojo creados
                     crearSoldados(misSoldados,orden,1); //Soldado ejercito 1 azul creados
@@ -107,17 +107,25 @@ public class VideoJuego10 {
     }
     public static void juego(ArrayList<ArrayList<Soldado>> misSoldados, ArrayList<Soldado> orden){
         System.out.println("\t\t\tCOMENZAMOS LA BATALLA!!!"); //Inician los turnos por jugador
+        System.out.println("Cantidad total de soldados creados: "+Soldado.getCantidadTotal());
         mostrarTablero(misSoldados);
+        soldadosPorEjercito();
         boolean continuar=true;
         while(continuar){
             nuevasPosiciones(0,orden,misSoldados);
+            soldadosPorEjercito();
             nuevasPosiciones(1,orden,misSoldados);
+            soldadosPorEjercito();
             continuar=continuar(orden);
         }    
     }
+    public static void soldadosPorEjercito(){
+        System.out.print(Soldado.getCantidadEjercito0()+" soldado(s) rojos ejercito0 \t/ \t");
+        System.out.println(Soldado.getCantidadEjercito1()+" soldado(s) azules ejercito1");
+    }//Metodo de impresion de cantidad de soldados vivientes
     //Metodos de juego rapido
     public static int nCantidadSoldados(){
-        return (int)(Math.random()*10)+1;
+        return (int)(Math.random()*Soldado.MAX_CANTIDAD)+1;
     }
     public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,int ejercito){
         int colStr;
@@ -128,9 +136,9 @@ public class VideoJuego10 {
                 fil = (int)(Math.random()*10);
                 col = (int)(Math.random()*10);
             }
-            Soldado nuevoSoldado;  //
-            nuevoSoldado=new Soldado("Soldado"+ejercito+"X"+i); //nombre asignado 
-            nuevoSoldado.Soldado(ejercito,fil+1); //ejercito, fila y luego columna asignados 
+            Soldado nuevoSoldado;  //Declaracion del objeto
+            nuevoSoldado = new Soldado("Soldado"+ejercito+"X"+i); //nombre asignado 
+            nuevoSoldado.soldadoEF(ejercito,fil+1); //ejercito, fila y luego columna asignados 
             nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
             nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
             nuevoSoldado.Soldado(1,1,1,"Ofensiva",true);  //Demas atributos nuevos asignados METODO SOBRECARGADO X3
@@ -351,23 +359,25 @@ public class VideoJuego10 {
                     nuevoCol--;
                     break;
             } 
-            Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto para que no se pierda cuando lo borremos del tablero
+            Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto del tablero para restaurarlo en la nueva posicion si gana
             arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto en su antigua posicion si pierde lo dejamos asi
             Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); // Si se encuentra un rival en la nueva posicion
             boolean miSoldadoeliminado=false;
             if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
                 System.out.println("\t\t\t>>Se ha iniciado una batalla !!<<");
                 int ganador = definirGanadorBatalla(soldadoE,rival);
-                if (ganador==1) {// El soldado gana 
+                if (ganador == 1) {// El soldado gana 
                     soldadoE.setFila(nuevoFil); //Actualizando datos de la lista orden
                     soldadoE.setColumna(nuevoCol);
                     soldadoE.ganarBatalla();
                     arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE); 
+                    rival.morir(); //Baja la cantidad en la variable clase que maneja la cantidad total y por ejercito
                     orden.remove(rival);
                     System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado y su lugar sera ocupado!");
-                    System.out.println("Ademas, su soldado gano 1 pto. mas de vida");
+                    System.out.println("Ademas, su soldado gano +1 pto. de vida");
                 }
                 else{ // el soldado pierde
+                    soldadoE.morir(); //Baja la cantidad en la variable clase que maneja la cantidad total y por ejercito
                     orden.remove(numCreacion); //Borra el soldado de la lista de soldados
                     System.out.println("Su soldado ha perdido la batalla y ha sido eliminado.");
                     miSoldadoeliminado=true; //Ya no se recuperara la info de este soldado 
@@ -392,23 +402,23 @@ public class VideoJuego10 {
     public static int definirGanadorBatalla(Soldado sold1,Soldado sold2){ //Devuelve el soldado ganador segun metrica
         int vidaSold1,vidaSold2;
         double total,proba1,proba2,aleat;
-        vidaSold1=sold1.getVidaActual();
-        vidaSold2=sold2.getVidaActual();
-        total=vidaSold1+vidaSold2; //En double para que la division de probabilidad salga no entero
-        proba1=vidaSold1/total;
-        proba2=vidaSold2/total; //Aunque no es necesario calcularlo para definir el ganador, usado para poner el porcent
+        vidaSold1 = sold1.getVidaActual();
+        vidaSold2 = sold2.getVidaActual();
+        total = vidaSold1+vidaSold2; //En double para que la division de probabilidad salga no entero
+        proba1 = vidaSold1/total;
+        proba2 = vidaSold2/total; //Aunque no es necesario calcularlo para definir el ganador, usado para poner el porcent
         System.out.println("*Probabilidades de vencer...\nSu soldado = "+(proba1*100)+"%\t/\tSu rival = "+(proba2*100)+"%");
         System.out.println("---> De acuerdo a dichas probabilidades se decidira el ganador aleatoriamente.\n...");
-        aleat=Math.random(); //devuelve un numero aleatorio entre 0-1 (double) mas probabilidas tienen los de mayor vida
-        if (aleat<=proba1)
+        aleat = Math.random(); //devuelve un numero aleatorio entre 0-1 (double) mas probabilidas tienen los de mayor vida
+        if (aleat <= proba1)
             return 1; //Gana soldado 1 
         else 
             return 2; //Gana soldado 2
     } //bien
-    public static boolean esIniciarNuevaPartida(){ //Ingreso de menu luego de partida terminada
-        Scanner sc=new Scanner (System.in);
+    public static boolean esIniciarNuevaPartida(){ //Ingreso de menu luego de partida terminada//bien
+        Scanner sc = new Scanner (System.in);
         System.out.println("**Elija una accion...\n1. Volver a jugar\t\t2. Volver al menu principal ");
         System.out.print(">Ingrese NRO de accion seleccionada: ");
-        return sc.nextInt()==1;
-    } //bien
+        return sc.nextInt() == 1;
+    } 
 }
