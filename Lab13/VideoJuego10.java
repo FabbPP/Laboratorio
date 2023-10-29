@@ -25,23 +25,83 @@ public class VideoJuego10 {
                     break;
                 }
                 case 2:{ //Juego personalizado, permite gestionar ejercitos
+                    int cantidadEjercito, fil = 0, col = 0;
                     inicializarTablero(misSoldados);
                     crearSoldados(misSoldados,orden,0); //Soldados ejercito 0 rojo creados
                     crearSoldados(misSoldados,orden,1); //Soldado ejercito 1 azul creados
                     int ejercitoE = eleccionEjercito(misSoldados,orden);
-                    boolean noVolver = true;
+                    if (ejercitoE == 0) //cantidad sera de acuerdo al ejercito elegido
+                        cantidadEjercito = Soldado.getCantidadEjercito0();
+                    else
+                        cantidadEjercito = Soldado.getCantidadEjercito1();
+                    boolean noVolver = true; //Para que entre al bucle al menos la primera vez
                     while (noVolver){
                         switch (subMenu2(ejercitoE)){
-                            case 1: {
+                            case 1: { //Agregar un soldado al ejercito
+                                if (cantidadEjercito <= Soldado.MAX_CANTIDAD){
+                                    fil = (int)(Math.random()*10);
+                                    col = (int)(Math.random()*10);
+                                    while (misSoldados.get(fil).get(col)!=null){
+                                        fil = (int)(Math.random()*10);
+                                        col = (int)(Math.random()*10);
+                                    }                   
+                                Soldado nuevoSoldado;  //Declaracion del objeto
+                                nuevoSoldado = new Soldado("Soldado"+ejercitoE+"X"+(cantidadEjercito+1)); //nombre asignado 
+                                nuevoSoldado.soldadoEF(ejercitoE,fil+1); //ejercito, fila y luego columna asignados 
+                                nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
+                                nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
+                                nuevoSoldado.Soldado(1,1,1,"Ofensiva",true);  //Demas atributos nuevos asignados METODO SOBRECARGADO X3
+                                misSoldados.get(fil).set(col, nuevoSoldado); //Soldado en el tablero datos fil-1 y col-1
+                                orden.add(misSoldados.get(fil).get(col)); //Arreglo que guardara el ejercito ordenado por creacion
+                                System.out.println(". . .\n Soldado creado exitosamente");
+                                }
+                                else //Default
+                                    System.out.println("No es posible agregar un soldado al ejercito debido a que este alcanzo el maximo permitido");
+                                break;
+                            }
+                            case 2: { //Eliminar el ultimo soldado al ejercito
+                                if (cantidadEjercito > 1){
+                                    int fila,colu;
+                                    Soldado posicion = orden.get(cantidadEjercito);
+                                    fila = posicion.getFila();
+                                    colu = posicion.getColumna();
+                                    misSoldados.get(fila-1).set(colu-1,null);
+                                    orden.remove(cantidadEjercito);
+                                   posicion.morir();
+                                }
+                                else //Default
+                                    System.out.println("No es posible eliminar el ultimo soldado debido a que este se quedaria vacio");
+                                break;
+                            }
+                            case 3:{
                                 
                                 break;
                             }
-                            case 2: {
+                            case 4: {
                                 
                                 break;
                             }
-                            
-                            case 10: {
+                            case 5: {
+                                
+                                break;
+                            }
+                            case 6: {
+                                
+                                break;
+                            }
+                            case 7: {
+                                
+                                break;
+                            }
+                            case 8: {
+                                
+                                break;
+                            }
+                            case 9: {
+                                
+                                break;
+                            }
+                            case 10: { //Jugar con los cambios realizados
                                 juego(misSoldados,orden);
                                 break;  
                             }
@@ -77,8 +137,8 @@ public class VideoJuego10 {
         System.out.println("Nota: Trabajando con ejercito "+ejercitoE);
         System.out.println("**Elija una opcion\n1. Crear Soldado\t\t2. Eliminar Soldado\t\t3. Clonar Soldado");
         System.out.println("4. Modificar Soldado\t\t5. Comparar Soldados\t\t6. Intercambiar Soldados");
-        System.out.println("7. Ver Soldado\t\t8. Ver ejercito\t\t9. Sumar niveles");
-        System.out.println("10. Jugar\t\t11. Volver al menu principal");
+        System.out.println("7. Ver Soldado\t\t\t8. Ver ejercito\t\t\t\t9. Sumar niveles");
+        System.out.println("10. Jugar\t\t\t11. Volver al menu principal");
         System.out.print(">Ingrese el NRO. de opcion deseada: ");
         return sc.nextInt();
 
@@ -120,8 +180,10 @@ public class VideoJuego10 {
         }    
     }
     public static void soldadosPorEjercito(){
-        System.out.print(Soldado.getCantidadEjercito0()+" soldado(s) rojos ejercito0 \t/ \t");
-        System.out.println(Soldado.getCantidadEjercito1()+" soldado(s) azules ejercito1");
+        System.out.println("\t\t      SOLDADOS");
+        System.out.println("\tROJOS \t\t |\t\t AZULES");
+        System.out.print(Soldado.getCantidadEjercito0()+" soldado(s) ejercito0 \t |\t");
+        System.out.println(Soldado.getCantidadEjercito1()+" soldado(s) ejercito1");
     }//Metodo de impresion de cantidad de soldados vivientes
     //Metodos de juego rapido
     public static int nCantidadSoldados(){
@@ -262,35 +324,22 @@ public class VideoJuego10 {
         for(int i=0;i<orden.size();i++)
             System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud: "+orden.get(i).getVidaActual());
     }
-    public static boolean continuar(ArrayList<Soldado> orden){ //ERROR //continuen las rondas hasta que un ejercito se quede sin s
-       boolean equipo0Vivo = false, equipo1Vivo = false;
-       for(int i = 0; i < orden.size(); i++){
-           if (orden.get(i).getEjercito() == 0)
-               equipo0Vivo = true;
-           if(orden.get(i).getEjercito() == 1)
-               equipo1Vivo = true;
-       }
-       if (equipo0Vivo && equipo1Vivo) //ambos equipos siguen manteniendo soldados continua el juego
+    public static boolean continuar(ArrayList<Soldado> orden){ //BIEN ENCUENTRA GANADOR PARTIDA
+       if (Soldado.getCantidadEjercito0() != 0 && Soldado.getCantidadEjercito1() != 0) //ambos equipos ((losdos) siguen manteniendo soldados continua el juego
            return true;
        System.out.print("Partida terminada, ");
-       if (equipo0Vivo){ //No es necesario invocar ambos booleanos segun la condicion...
+       if (Soldado.getCantidadEjercito1() == 0){ //No es necesario invocar ambos booleanos segun la condicion...
            System.out.println("la totalidad del ejercito 1 azul, del jugador 1 fue eliminado");
            System.out.println("------> EL EJERCITO ROJO GANO <------");
            System.out.println("------> Felicidades jugador 1! <------");
        }
-       else { //Si gano el equipo 2
+       else { //Si gano el equipo 0
            System.out.println("la totalidad del ejercito 0 rojo, del jugador 2 fue eliminado");
            System.out.println("------> EL EJERCITO AZUL GANO <------");
            System.out.println("------> Felicidades jugador 2! <------");
        }
-       return false;
-                 
+       return false; //ALGUN EQUIPO HA PERDIDO, SE QUEDO SIN SOLDADOS, LA PARTIDA FINALIZA, TENEMOS UN GANADOR   
     }   
-    public static int ganadorPartida(boolean vivo0){ //Dentro del metodo continuar solo si termina un equipo sin jugadores
-        if (vivo0=true)
-            return 0;
-        return 1;
-    } 
     public static void nuevasPosiciones(int e,ArrayList<Soldado> orden,ArrayList<ArrayList<Soldado>> arrL){
         Scanner sc=new Scanner(System.in);
         String eColor;

@@ -3,7 +3,7 @@ public class Soldado {
     public static final int MAX_CANTIDAD = 10;//Constante de Clase
     private static int cantidadTotal = 0; //Variable de Clase
     private static int cantidadEjercito0 = 0;  //Varianle de Clase 
-    private static int cantidadEjercito1 = 0;  //Variable de Clase 
+    private static int cantidadEjercito1= 0;  //Variable de Clase 
     private String nombre;
     private int ejercito;
     private int fila;
