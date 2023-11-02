@@ -32,13 +32,12 @@ public class Soldado {
         return cantidadEjercito1;
     }
     //Metodos de instancia
-    public void soldadoEF (int e,int f){ //Simula un setEjercito y setFila //VARIABLE DE CLASE
-        ejercito=e;
+    public void soldadoF (int f){ //Simula un setEjercito y setFila //VARIABLE DE CLASE
         fila=f;
-        if (ejercito == 0)
+        if (ejercito == 0) //Modifica en clase Ejercito
             cantidadEjercito0 += 1;
         else
-            cantidadEjercito1 += 1;
+            cantidadEjercito1 += 1; //Modificar
     }
     public void Soldado(int nA,int nD,int v,String a,boolean vi){
         nivelAtaque=nA;   //Inicializa por defecto los valores predeterminados

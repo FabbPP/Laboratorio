@@ -186,24 +186,32 @@ public class VideoJuego11 {
         System.out.println(Soldado.getCantidadEjercito1()+" soldado(s) ejercito1");
     }//Metodo de impresion de cantidad de soldados vivientes
     //Metodos de juego rapido
-    public static int nCantidadSoldados(){
+    public static int nCantidad(){
         return (int)(Math.random()*Soldado.MAX_CANTIDAD)+1;
     }
-    public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,int ejercito){
+    public static void crearEjercitos(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,Reino reino){
+        for (int i=0; i<nCantidad(); i++){
+            Ejercito nuevoEjercito = new Ejercito("Ejercito"+i);
+            crearSoldados(arrL,orden,nuevoEjercito);
+            reino.agregarEjercito(nuevoEjercito);
+        }
+    }
+    public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,Ejercito ejercito){
         int colStr;
-        for (int i=0; i<nCantidadSoldados(); i++ ){
+        for (int i=0; i<nCantidad(); i++ ){
             int fil = (int)(Math.random()*10);
             int col = (int)(Math.random()*10);
-            while (arrL.get(fil).get(col)!=null){
+            while (arrL.get(fil).get(col)!=null){ //Seguir regenerando la posicion aletatoriamente hasta una posicion vacia
                 fil = (int)(Math.random()*10);
                 col = (int)(Math.random()*10);
             }
             Soldado nuevoSoldado;  //Declaracion del objeto
-            nuevoSoldado = new Soldado("Soldado"+ejercito+"X"+i); //nombre asignado 
-            nuevoSoldado.soldadoEF(ejercito,fil+1); //ejercito, fila y luego columna asignados 
+            nuevoSoldado = new Soldado("Soldado"+"X"+i); //nombre asignado 
+            nuevoSoldado.soldadoF(fil+1); //ejercito, fila y luego columna asignados 
             nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
             nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
             nuevoSoldado.Soldado(1,1,1,"Ofensiva",true);  //Demas atributos nuevos asignados METODO SOBRECARGADO X3
+            ejercito.agregarSoldado(nuevoSoldado);
             arrL.get(fil).set(col, nuevoSoldado); //Soldado en el tablero datos fil-1 y col-1
             orden.add(arrL.get(fil).get(col)); //Arreglo que guardara el ejercito ordenado por creacion
         }
