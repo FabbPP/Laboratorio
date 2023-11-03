@@ -212,21 +212,22 @@ public class VideoJuego11 {
             reino2.agregarEjercito(nuevoEjercito);
         }
     }
-    public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,Ejercito ejercito){ //arrL es tablero
-        for (int i=0; i<nCantidad(); i++ ){
-            int fil = (int)(Math.random()*10);
-            int col = (int)(Math.random()*10);
-            while (arrL.get(fil).get(col)!=null){ //Seguir regenerando la posicion aletatoriamente hasta una posicion vacia
-                fil = (int)(Math.random()*10);
-                col = (int)(Math.random()*10);
+    public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL, ArrayList orden, Ejercito ejercito) {
+        for (int i = 0; i < nCantidad(); i++) {
+            int fil = (int) (Math.random() * 10);
+            int col = (int) (Math.random() * 10);
+            while (arrL.get(fil).get(col) != null) {
+                fil = (int) (Math.random() * 10);
+                col = (int) (Math.random() * 10);
             }
-            Soldado nuevoSoldado;  //Declaracion del objeto
-            nuevoSoldado = new Soldado("Soldado i",ejercito,1,1,1,"Ofensiva",true);
-            nuevoSoldado.setFila(fil+1).setColumna(col+1); //Asignamos fila y columna
-            nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
-            ejercito.agregarSoldado(nuevoSoldado);
-            arrL.get(fil).set(col, nuevoSoldado); //Soldado en el tablero de ejercito vs ejercito
-            orden.add(arrL.get(fil).get(col)); //Arreglo que guardara el ejercito y sus datos 
+
+            Soldado nuevoSoldado = new Soldado("Soldado " + i, ejercito, 1, 1, 1, "Ofensiva", true);
+            nuevoSoldado.setFila(fil + 1);
+            nuevoSoldado.setColumna(col + 1);
+            nuevoSoldado.setVidaActual((int) (Math.random() * 5 + 1));
+            ejercito.agregarSoldado(nuevoSoldado.getNombre(), nuevoSoldado.getNivelAtaque(), nuevoSoldado.getNivelDefensa(), nuevoSoldado.getVelocidad(), nuevoSoldado.getActitud(), nuevoSoldado.getVive());
+            arrL.get(fil).set(col, nuevoSoldado);
+            orden.add(nuevoSoldado);
         }
     }
     public static void mostrarTablero(ArrayList<ArrayList<Soldado>> arrL){
