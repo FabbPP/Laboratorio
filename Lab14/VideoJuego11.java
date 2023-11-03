@@ -47,7 +47,7 @@ public class VideoJuego11 {
                                     }                   
                                 Soldado nuevoSoldado;  //Declaracion del objeto
                                 nuevoSoldado = new Soldado("Soldado"+ejercitoE+"X"+(cantidadEjercito+1)); //nombre asignado 
-                                nuevoSoldado.soldadoEF(ejercitoE,fil+1); //ejercito, fila y luego columna asignados 
+                                nuevoSoldado.soldadoF(fil+1); //ejercito, fila y luego columna asignados 
                                 nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
                                 nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
                                 nuevoSoldado.Soldado(1,1,1,"Ofensiva",true);  //Demas atributos nuevos asignados METODO SOBRECARGADO X3
@@ -189,15 +189,30 @@ public class VideoJuego11 {
     public static int nCantidad(){
         return (int)(Math.random()*Soldado.MAX_CANTIDAD)+1;
     }
-    public static void crearEjercitos(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,Reino reino){
-        for (int i=0; i<nCantidad(); i++){
-            Ejercito nuevoEjercito = new Ejercito("Ejercito"+i);
+    public static Reino crearReino(){
+        Scanner sc = new Scanner (System.in);
+        System.out.println("**Escoja el nombre de su reino (Inglaterra, Francia, Sacro Imperio, Castilla–Aragón y Moros).");
+        System.out.print(">Ingrese el nombre: ");
+        Reino unReino = new Reino(sc.next());
+        return unReino;
+    }
+    public static void crearEjercitosSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,Reino reino){
+        Reino reino1 = crearReino();
+        int cantidadReino1 = nCantidad();
+        for (int i=0; i<cantidadReino1; i++){
+            Ejercito nuevoEjercito = new Ejercito("Ejercito"+reino1.getNombre().substring(0,2));
             crearSoldados(arrL,orden,nuevoEjercito);
-            reino.agregarEjercito(nuevoEjercito);
+            reino1.agregarEjercito(nuevoEjercito);
+        }
+        Reino reino2 = crearReino();
+        int cantidadReino2 = nCantidad();
+        for (int i=0; i<cantidadReino2; i++){
+            Ejercito nuevoEjercito = new Ejercito("Ejercito"+reino2.getNombre().substring(0,2));
+            crearSoldados(arrL,orden,nuevoEjercito);
+            reino2.agregarEjercito(nuevoEjercito);
         }
     }
-    public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,Ejercito ejercito){
-        int colStr;
+    public static void crearSoldados(ArrayList<ArrayList<Soldado>> arrL,ArrayList orden,Ejercito ejercito){ //arrL es tablero
         for (int i=0; i<nCantidad(); i++ ){
             int fil = (int)(Math.random()*10);
             int col = (int)(Math.random()*10);
@@ -206,18 +221,16 @@ public class VideoJuego11 {
                 col = (int)(Math.random()*10);
             }
             Soldado nuevoSoldado;  //Declaracion del objeto
-            nuevoSoldado = new Soldado("Soldado"+"X"+i); //nombre asignado 
-            nuevoSoldado.soldadoF(fil+1); //ejercito, fila y luego columna asignados 
-            nuevoSoldado.setColumna(col+1); //Por separado para tambien dar valor a columnaStr
+            nuevoSoldado = new Soldado("Soldado i",ejercito,1,1,1,"Ofensiva",true);
+            nuevoSoldado.setFila(fil+1).setColumna(col+1); //Asignamos fila y columna
             nuevoSoldado.setVidaActual((int)(Math.random()*5+1));
-            nuevoSoldado.Soldado(1,1,1,"Ofensiva",true);  //Demas atributos nuevos asignados METODO SOBRECARGADO X3
             ejercito.agregarSoldado(nuevoSoldado);
-            arrL.get(fil).set(col, nuevoSoldado); //Soldado en el tablero datos fil-1 y col-1
-            orden.add(arrL.get(fil).get(col)); //Arreglo que guardara el ejercito ordenado por creacion
+            arrL.get(fil).set(col, nuevoSoldado); //Soldado en el tablero de ejercito vs ejercito
+            orden.add(arrL.get(fil).get(col)); //Arreglo que guardara el ejercito y sus datos 
         }
     }
     public static void mostrarTablero(ArrayList<ArrayList<Soldado>> arrL){
-        System.out.println("Recordatorio -  ");
+        System.out.println("Tablero:  ");
         System.out.println(" A  B  C  D  E  F  G  H  I  J");
         for (int i = 0; i < arrL.size(); i++){
             for (int j = 0; j < arrL.get(i).size(); j++){

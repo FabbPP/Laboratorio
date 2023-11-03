@@ -2,10 +2,8 @@ package Lab14;
 public class Soldado {
     public static final int MAX_CANTIDAD = 10;//Constante de Clase
     private static int cantidadTotal = 0; //Variable de Clase
-    private static int cantidadEjercito0 = 0;  //Varianle de Clase 
-    private static int cantidadEjercito1= 0;  //Variable de Clase 
+    private Ejercito ejercito;  
     private String nombre;
-    private int ejercito;
     private int fila;
     private int columna; //Usada solo para reconocer posicion
     private String columnaStr; 
@@ -16,53 +14,39 @@ public class Soldado {
     private String actitud;
     private String vive;
     
-    //Constructor sobrecargados
-    public Soldado(String n){  //Simula un setNombre y es el principal
-        nombre=n;
-        cantidadTotal += 1;
+    //Constructor sobrecargado
+    public Soldado(String n, Ejercito e,int nA,int nD,int v,String a,boolean vi){  //Simula un setNombre y es el principal
+        nombre = n;
+        ejercito = e;
+        cantidadTotal ++;
+        nivelAtaque = nA;   //Inicializa por defecto los valores predeterminados
+        nivelDefensa = nD;
+        velocidad = v;
+        actitud = a;
+        if (vi)
+            vive = "si";
+        else 
+            vive = "no";
     }
     //Metodos de clase
     public static int getCantidadTotal(){
         return cantidadTotal;
     }
-    public static int getCantidadEjercito0(){
-        return cantidadEjercito0;
-    }
-    public static int getCantidadEjercito1(){
-        return cantidadEjercito1;
-    }
     //Metodos de instancia
-    public void soldadoF (int f){ //Simula un setEjercito y setFila //VARIABLE DE CLASE
-        fila=f;
-        if (ejercito == 0) //Modifica en clase Ejercito
-            cantidadEjercito0 += 1;
-        else
-            cantidadEjercito1 += 1; //Modificar
-    }
-    public void Soldado(int nA,int nD,int v,String a,boolean vi){
-        nivelAtaque=nA;   //Inicializa por defecto los valores predeterminados
-        nivelDefensa=nD;
-        velocidad=v;
-        actitud=a;
-        if (vi)
-            vive = "si";
-        else 
-            vive = "no";
+    public Soldado setFila(int f){ //mETHOD CALL CHAINING
+        fila = f;
+        return this;
     }
     //Get y set de atributos 
      //Metodos de atributos solo accesores, ya definidos en clase Soldado
     public String getNombre(){
         return nombre;
     }
-    public int getEjercito(){
+    public Ejercito getEjercito(){
         return ejercito;
     }    
     public int getFila(){
         return fila;
-    }
-    //Necesarios
-    public void setFila(int f){
-        fila=f;
     }
     public void setColumna(int c){  //Debido a que columna es una letra 
         columna = c;
@@ -113,9 +97,9 @@ public class Soldado {
     }    
     public void setVive(boolean v){
         if (v == true)
-            vive="si";
+            vive = "si";
         else 
-            vive="no";
+            vive = "no";
     }
     public String getVive(){
         return vive;
@@ -136,7 +120,7 @@ public class Soldado {
     }
     //Acciones
     public void avanzar(){
-        velocidad+=1;
+        velocidad ++;
     }
     public void atacar(){
         actitud = "ofensiva";
@@ -163,17 +147,15 @@ public class Soldado {
     }
     public void morir(){ //Contiene algunas variables de clase
         vive = "no";
-        cantidadTotal -= 1;
-        if (ejercito==0)
-            cantidadEjercito0 -= 1;
-        else 
-            cantidadEjercito1 -= 1;
+        cantidadTotal --;
+        ejercito.eliminarSoldado(this);
+
     }
     public void huir(){
         actitud="fuga";
         velocidad += 2;
     }
     public void ganarBatalla(){
-        vidaActual+=1;
+        vidaActual += 1;
     }
 }
