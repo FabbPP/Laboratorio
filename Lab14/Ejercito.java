@@ -4,7 +4,6 @@ public class Ejercito {
     private static int cantidadEjercitos = 0;
     private String nombre;
     private Reino reino;
-    private int id; // Identificador para poder diferenciar los ejércitos
     private ArrayList<Soldado> soldados;
 
     public Ejercito(String n) {
@@ -15,66 +14,34 @@ public class Ejercito {
     public int getCantidadEjercitos() {
         return cantidadEjercitos;
     }
-    public void agregarSoldado(String nombre, int nivelAtaque, int nivelDefensa, int velocidad, String actitud, boolean vive) {
-        if (soldados.size() < Soldado.MAX_CANTIDAD) {
-            Soldado nuevoSoldado = new Soldado(nombre, this, nivelAtaque, nivelDefensa, velocidad, actitud, vive);
+    public void agregarSoldado(ArrayList<ArrayList<Soldado>> arrL, ArrayList orden,String nombre, int nivelAtaque, int nivelDefensa, int velocidad, String actitud, boolean vive,int fil,int col) {
+        if (soldados.size() < Soldado.MAX_CANTIDAD) {       
+            Soldado nuevoSoldado = new Soldado(nombre, this, nivelAtaque, nivelDefensa, velocidad, actitud, vive,(fil+1));
+            nuevoSoldado.setColumna(col+1);
+            arrL.get(fil).set(col, nuevoSoldado);
+            orden.add(nuevoSoldado);
             soldados.add(nuevoSoldado);
-        } else {
-            System.out.println("No es posible agregar más soldados, el ejército ha alcanzado su límite.");
-        }
+        } 
+        else 
+            System.out.println("No es posible agregar más soldados, el ejército ha alcanzado su límite."); 
     }
     public void eliminarSoldado(Soldado unSoldado) {
-        if (soldados.contains(unSoldado)) {
+        if (soldados.contains(unSoldado)) 
             soldados.remove(unSoldado);
-        } else {
+        else 
             System.out.println("El soldado no pertenece a este ejército.");
-        }
+        
     }
-
-    public int getCantidadSoldados() {
+    public int getCantidadSoldados() { //IMPORTANTE RECUPERA CANTIDAD DE SOLDADOS POR EJERCITO
         return soldados.size();
     }
-
+    public boolean esEjercitoVacio(){
+        return (soldados.isEmpty());
+    }
     public void setReino(Reino reino) {
         this.reino = reino;
     }
-
-    public void tostring() {
-        System.out.println("Datos del ejército...");
-        System.out.println("-Soldado con mayor vida: ");
-        int maxI = 0, maxJ = 0, mayorNivelV = 0;
-        for (int i = 0; i < soldados.size(); i++) {
-            Soldado posicion = soldados.get(i);
-            if (mayorNivelV < posicion.getVidaActual()) {
-                mayorNivelV = posicion.getVidaActual();
-                maxI = i;
-            }
-
-        }
-        mostrarDatos(maxI);
-        System.out.println("-Promedio de nivel de vida del ejército: " + promedioNivelVida() + "\n");
-    }
-
-    public void mostrarDatos(int maxI) {
-        Soldado posicion = soldados.get(maxI);
-        System.out.println("  Nombre: " + posicion.getNombre());
-        System.out.println("  Ejercito: " + posicion.getEjercito());
-        System.out.println("  Fila: " + posicion.getFila());
-        System.out.println("  Columna: " + posicion.getColumnaStr());
-        System.out.println("  Nivel ataque: " + posicion.getNivelAtaque());
-        System.out.println("  Nivel defensa: " + posicion.getNivelDefensa());
-        System.out.println("  Vida Actual: " + posicion.getVidaActual());
-        System.out.println("  Velocidad: " + posicion.getVelocidad());
-        System.out.println("  Actitud: " + posicion.getActitud());
-        System.out.println("  Vive: " + posicion.getVive() + "\n");
-    }
-
-    public double promedioNivelVida() {
-        double vidaTotal = 0;
-        for (int i = 0; i < soldados.size(); i++) {
-            int vida = soldados.get(i).getVidaActual();
-            vidaTotal += vida;
-        }
-        return vidaTotal / soldados.size();
-    }
+    public Reino getReino(){
+        return reino;
+    }   
 }
