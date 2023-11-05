@@ -151,10 +151,10 @@ public class Soldado {
         if (vidaActual == 0)
             morir();
     }
-    public void morir(){ //Contiene algunas variables de clase
+    public void morir(){ //Llama al metodo tambien de eliminar el soldado de ejercito 
         vive = "no";
         cantidadTotal --;
-        ejercito.eliminarSoldado(this);
+        ejercito.eliminarSoldado(this); //La cantidad de soldado se actualiza automaticamente
 
     }
     public void huir(){
@@ -164,23 +164,6 @@ public class Soldado {
     public void ganarBatalla(){
         vidaActual += 1;
     }
-    //Metodos toString cadenas
-    public void tostring() {
-        System.out.println("Datos del ejército...");
-        System.out.println("-Soldado con mayor vida: ");
-        int maxI = 0, maxJ = 0, mayorNivelV = 0;
-        for (int i = 0; i < soldados.size(); i++) {
-            Soldado posicion = soldados.get(i);
-            if (mayorNivelV < posicion.getVidaActual()) {
-                mayorNivelV = posicion.getVidaActual();
-                maxI = i;
-            }
-
-        }
-        mostrarDatos(maxI);
-        System.out.println("-Promedio de nivel de vida del ejército: " + promedioNivelVida() + "\n");
-    }
-
     public void mostrarDatos() {
         System.out.println("  Nombre: " + this.getNombre());
         System.out.println("  Ejercito: " + this.getEjercito());
@@ -192,14 +175,5 @@ public class Soldado {
         System.out.println("  Velocidad: " + this.getVelocidad());
         System.out.println("  Actitud: " + this.getActitud());
         System.out.println("  Vive: " + this.getVive() + "\n");
-    }
-
-    public double promedioNivelVida() {
-        double vidaTotal = 0;
-        for (int i = 0; i < soldados.size(); i++) {
-            int vida = soldados.get(i).getVidaActual();
-            vidaTotal += vida;
-        }
-        return vidaTotal / soldados.size();
     }
 }

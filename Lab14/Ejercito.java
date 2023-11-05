@@ -11,6 +11,15 @@ public class Ejercito {
         this.soldados = new ArrayList<>();
         cantidadEjercitos++;
     }
+    public void setReino(Reino reino) {
+        this.reino = reino;
+    }    
+    public Reino getReino(){
+        return reino;
+    }   
+    public String getNombre(){
+        return nombre;
+    }
     public int getCantidadEjercitos() {
         return cantidadEjercitos;
     }
@@ -38,10 +47,13 @@ public class Ejercito {
     public boolean esEjercitoVacio(){
         return (soldados.isEmpty());
     }
-    public void setReino(Reino reino) {
-        this.reino = reino;
+    public double promedioNivelVida() {
+        double vidaTotal = 0;
+        for (int i = 0; i < soldados.size(); i++) {
+            int vida = soldados.get(i).getVidaActual();
+            vidaTotal += vida;
+        }
+        return vidaTotal / soldados.size();
     }
-    public Reino getReino(){
-        return reino;
-    }   
+
 }

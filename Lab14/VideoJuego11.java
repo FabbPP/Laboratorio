@@ -130,13 +130,13 @@ public class VideoJuego11 {
    }
     //Metodos de menu
     public static int menu1(){ //Eleccion de modos de juego
-        Scanner sc = new Scanner (System.in);
+        Scanner sc = new Scanner (System.in); //principal
         System.out.println("\t\t\tBIENVENIDO AL VIDEOJUEGO");
         System.out.println("**Elija un modo de juego...\n1. Juego Rapido\t\t2. Juego Personalizado\t\t3. Salir");
         System.out.print(">Ingrese el NRO. de modo seleccionado: ");
         return sc.nextInt();
     } //Buen funcionamiento
-    public static int subMenu2(int ejercitoE){
+    public static int subMenu2(int ejercitoE){ //Secundario
         Scanner sc = new Scanner (System.in);
         System.out.println("Nota: Trabajando con ejercito "+ejercitoE);
         System.out.println("**Elija una opcion\n1. Crear Soldado\t\t2. Eliminar Soldado\t\t3. Clonar Soldado");
@@ -148,12 +148,30 @@ public class VideoJuego11 {
 
     }
     //Gestionamiento de ejercito
-    public static int eleccionEjercito(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden){
+    public static int eleccionEjercitoSubMenu(Reino reino1,Reino reino2){ //Subsecundario
         Scanner sc = new Scanner (System.in);
-        System.out.println("Se muestran la lista de soldados por ejercito");
-        mostrarDatosOrden(arrL,orden);
-        System.out.println("**Tendra que escoger cual de los ejercitos gestionar\n 0. Ejercito0 \t 1. Ejercito1");
-        System.out.println(">Ingrese NRO. de ejercito seleccionado: ");
+        Reino reinoE = reino2;
+        String ejLista = "";
+        System.out.println("\t\t>>Menu de gestion de ejercitos<<");
+        System.out.println("**Elija un reino\n1. Reino1\t\t2. Reino2");
+        System.out.print(">Ingrese el NRO. de su seleccion: ");
+        switch (sc.nextInt()){
+            case 1: {
+                reinoE = reino1;
+                break;
+            }
+            case 2: {
+                reinoE = reino2;
+            }
+                
+        }
+        System.out.println("**Elija un ejercito que desea modificar de los creados");
+        for (int i=0; i<reinoE.getEjercitos().size(); i++){
+            Ejercito ejercito = reinoE.getEjercitos().get(i);
+            ejLista += (i+1+".-"+ejercito.getNombre());
+        }
+        System.out.println(ejLista);
+        System.out.print(">Ingrese el NRO. de ejercito de su seleccion: ");
         return sc.nextInt();
     }
     
@@ -170,8 +188,10 @@ public class VideoJuego11 {
         return arrL;
     }
     public static void juego(ArrayList<ArrayList<Soldado>> misSoldados, ArrayList<Soldado> orden,Reino reino1, Reino reino2){
-        System.out.println("\t\t\tCOMENZAMOS LA BATALLA!!!"); //Inician los turnos por jugador
-        System.out.println("Cantidad total de soldados creados: "+Soldado.getCantidadTotal());
+        System.out.println("\t\t\tCOMENZAMOS LA BATALLA ENTRE REINOS!!!"); //Inician los turnos por jugador
+        System.out.println("Cantidad total de ejercitos creados: "+Soldado.getCantidadTotal());
+        System.out.println("Cantidad de ejercitos de Reino1 creados: "+reino1.getCantidadEjercitos());
+        System.out.println("Cantidad de ejercitos de Reino2 creados: "+reino2.getCantidadEjercitos());
         mostrarTablero(misSoldados,reino1,reino2);
         soldadosPorEjercito();
         boolean continuar = true;
@@ -255,15 +275,15 @@ public class VideoJuego11 {
         System.out.println("  Actitud: "+ posicion.getActitud());
         System.out.println("  Vive: "+ posicion.getVive()+"\n");
     }
-    public static void datosMayorVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,int ejercito){ //bien
-        System.out.println("EJERCITO "+ejercito);
+    public static void datosMayorVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,Ejercito unEjercito){ //bien
+        System.out.println("EJERCITO "+unEjercito.getNombre());
         System.out.println("-Datos de soldado con mayor vida: ");
         int maxI = 0,maxJ = 0,mayorNivelV = 0;
         for(int i = 0; i < orden.size(); i++){
             int fil = orden.get(i).getFila()-1;
             int col = orden.get(i).getColumna()-1;
             Soldado posicion=arrL.get(fil).get(col);
-            if (posicion.getEjercito()==ejercito){
+            if (posicion.getEjercito()==unEjercito){
                 if (mayorNivelV<posicion.getVidaActual()){
                     mayorNivelV=posicion.getVidaActual();
                     maxI = fil;
@@ -272,28 +292,18 @@ public class VideoJuego11 {
             }
         }
         mostrarDatos(arrL,maxI,maxJ);
-        System.out.println("-Promedio de nivel de vida del ejercito: "+promedioNivelVida(arrL,orden,ejercito)+"\n");
+        System.out.println("-Promedio de nivel de vida del ejercito: "+unEjercito.promedioNivelVida()+"\n");
     }
-    public static double promedioNivelVida(ArrayList<ArrayList<Soldado>> arrL,ArrayList<Soldado> orden,int ejercito){
-        double sumVida = 0;
-        for(int i = 0; i < orden.size(); i ++){
-            int fil = orden.get(i).getFila()-1;
-            int col = orden.get(i).getColumna()-1;
-            Soldado posicion=arrL.get(fil).get(col);
-            if(posicion.getEjercito()==ejercito)
-                sumVida+=posicion.getVidaActual();
-        }
-        return sumVida/orden.size();
-    }
-    public static void mostrarDatosOrden(ArrayList<Soldado> orden,Reino reino1,Reino reino2){ //Bien
-        System.out.println("LISTA DE SOLDADOS REINO "+reino1.getNombre());
+
+    public static void mostrarDatosOrden(ArrayList<Soldado> orden,Ejercito ejercito1,Ejercito ejercito2){ //Bien
+        System.out.println("LISTA DE SOLDADOS EJERCITO DE "+ejercito1.getReino().getNombre());
         for (int i = 0; i < orden.size(); i ++){
-            if (orden.get(i).getReino()==reino1)
+            if (orden.get(i).getEjercito() == ejercito1)
                 orden.get(i).mostrarDatos();
         }
-        System.out.println("LISTA DE SOLDADOS REINO "+reino2.getNombre());
+        System.out.println("LISTA DE SOLDADOS EJERCITO DE "+ejercito2.getReino().getNombre());
         for (int i = 0; i < orden.size(); i ++){
-            if (orden.get(i).getReino()==reino2)
+            if (orden.get(i).getEjercito() == ejercito2)
                orden.get(i).mostrarDatos();  
         }
     }
@@ -304,8 +314,8 @@ public class VideoJuego11 {
         }
 
         int temp;
-        for (int i = 0; i < orden.size() - 1; i++) {
-            for (int j = 0; j < orden.size() - i - 1; j++) {
+        for (int i = 0; i < orden.size() - 1; i++) 
+            for (int j = 0; j < orden.size() - i - 1; j++) 
                 if (orden.get(j) != null) {
                     int ant = orden.get(indices.get(j)).getVidaActual();
                     int pos = orden.get(indices.get(j + 1)).getVidaActual();
@@ -315,8 +325,7 @@ public class VideoJuego11 {
                         indices.set(j + 1, temp);
                     }
                 }
-            }
-        }
+
         System.out.println("RANKING DE PODER POR ORDENAMIENTO BURBUJA...");
         System.out.println("Aclaracion: ejercito 0 (rojo) / ejercito 1 (azul)");
         for (int i = 0; i < orden.size(); i++) {
@@ -342,59 +351,70 @@ public class VideoJuego11 {
         for(int i=0;i<orden.size();i++)
             System.out.println((i+1)+".- "+orden.get(i).getNombre()+"\t, salud: "+orden.get(i).getVidaActual());
     }
-    public static boolean continuar(ArrayList<Soldado> orden,Reino reino1,Reino reino2){ //BIEN ENCUENTRA GANADOR PARTIDA
+    public static boolean continuarEjercitos(ArrayList<Soldado> orden,Ejercito ejercito1,Ejercito ejercito2){
+        if (!(ejercito1.esEjercitoVacio() && ejercito2.esEjercitoVacio())) //ambos equipos (losdos) siguen manteniendo soldados continua el juego
+           return true;
+       System.out.print(">Tenemos un ganador en esta batalla de ejercitos... ");
+       if (ejercito1.esEjercitoVacio()) //No es necesario invocar ambos booleanos segun la condicion..
+           System.out.println("--->El ejercito "+ejercito1.getNombre()+" acabo con el otro ejercito<---");
+       else  //Si gano el equipo 0
+           System.out.println("--->El ejercito "+ejercito2.getNombre()+" acabo con el otro ejercito<---");
+       System.out.println("A continuacion seguiremos con el tablero de ejercitos");
+       return false; //Iremos al tablero de ejercitos
+    }
+    public static boolean continuarReinos(ArrayList<Soldado> orden,Reino reino1,Reino reino2){ //BIEN ENCUENTRA GANADOR PARTIDA
        if (!(reino1.esReinoVacio() && reino2.esReinoVacio())) //ambos equipos (losdos) siguen manteniendo soldados continua el juego
            return true;
        System.out.print("Partida terminada, ");
        if (reino1.esReinoVacio()){ //No es necesario invocar ambos booleanos segun la condicion...
            System.out.println("la totalidad del reino "+reino2.getNombre()+" azul fue eliminado");
            System.out.println("------> EL REINO ROJO GANO <------");
-           System.out.println("------> Felicidades jugador 1, su reino "+reino1.getNombre()+" ha ganado! <------");
+           System.out.println("------> Felicidades "+reino1.getNombre()+" ha ganado! <------");
        }
        else { //Si gano el equipo 0
            System.out.println("la totalidad del reino "+reino1.getNombre()+" rojo fue eliminado");
            System.out.println("------> EL REINO AZUL GANO <------");
-           System.out.println("------> Felicidades jugador 2, su reino "+reino2.getNombre()+" ha ganado! <------");
+           System.out.println("------> Felicidades "+reino2.getNombre()+" ha ganado! <------");
        }
        return false; //ALGUN EQUIPO SE QUEDO SIN SOLDADOS, LA PARTIDA FINALIZA, TENEMOS UN GANADOR, no continuar turnos   
     }   
-    public static void nuevasPosiciones(ArrayList<Soldado> orden,ArrayList<ArrayList<Soldado>> arrL,Ejercito unEjercito){
+    public static void nuevasPosiciones(ArrayList<Soldado> orden,ArrayList<ArrayList<Soldado>> arrL,Ejercito unEjercito,Reino r1,Reino r2){
         Scanner sc = new Scanner(System.in);
         String eColor;
         eColor = unEjercito.getReino().getColor();
-        boolean noEsVacio = !unEjercito.esEjercitoVacio();
+        boolean noEsVacio = unEjercito.esEjercitoVacio();
         if (noEsVacio){ //Con tal que existan aun soldado en el ejercito
-            System.out.println("\n\t\t\t>>>Turno de Jugador "+unEjercito.getReino()+"<<<");
+            System.out.println("\n\t\t\t>>>Turno de " + unEjercito.getReino().getNombre()+"<<<");
             System.out.println("**Elija un soldado de su Ejercito "+eColor); //Se mostrara la lista de Soldados de su ejercito
             for(int i=0; i<orden.size(); i++){
-                if(orden.get(i).getEjercito()==e){
-                    Soldado posicion=orden.get(i);
+                if(orden.get(i).getEjercito() == unEjercito){
+                    Soldado posicion = orden.get(i);
                     System.out.println("NRO "+i+". "+posicion.getNombre()+": ");
                     System.out.println("  posicion: "+posicion.getFila()+"x"+posicion.getColumnaStr());
                 }
             }
             System.out.print(" >Ingrese NRO. de soldado seleccionado: ");
-            int numCreacion=sc.nextInt();
-            Soldado soldadoE=orden.get(numCreacion);
+            int numCreacion = sc.nextInt();
+            Soldado soldadoE = orden.get(numCreacion);
             int fil = soldadoE.getFila();
             int col = soldadoE.getColumna(); //En modo numero para poder ubicarla en el tablero usando arr orden
             System.out.println("Soldado ubicado "+fil+"x"+soldadoE.getColumnaStr());
             System.out.println("**Elija una de las direcciones de movimiento disponibles...");
             ArrayList<String> posicionesStr = new ArrayList<>();//movimientos
             ArrayList<String> letrasPosicion = new ArrayList<>(); //letras accedoras a movimiento a  s  d  w
-            if (soldadoE.getFila() != 1 && esMovimientoValido(arrL,soldadoE.getFila()-1,soldadoE.getColumna(),e)){//arriba
+            if (soldadoE.getFila() != 1 && esMovimientoValido(arrL,soldadoE.getFila()-1,soldadoE.getColumna(),unEjercito)){//arriba
                 posicionesStr.add("arriba");
                 letrasPosicion.add("W");
             }
-            if (soldadoE.getFila() != 10 && esMovimientoValido(arrL,soldadoE.getFila()+1,soldadoE.getColumna(),e)){//abajo
+            if (soldadoE.getFila() != 10 && esMovimientoValido(arrL,soldadoE.getFila()+1,soldadoE.getColumna(),unEjercito)){//abajo
                 posicionesStr.add("abajo");
                 letrasPosicion.add("S");
             }
-            if (soldadoE.getColumna() != 10 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()+1,e)){//der
+            if (soldadoE.getColumna() != 10 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()+1,unEjercito)){//der
                 posicionesStr.add("derecha");
                 letrasPosicion.add("D");
             }
-            if (soldadoE.getColumna() != 1 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()-1,e)){//izq
+            if (soldadoE.getColumna() != 1 && esMovimientoValido(arrL,soldadoE.getFila(),soldadoE.getColumna()-1,unEjercito)){//izq
                 posicionesStr.add("izquierda");
                 letrasPosicion.add("A");
             }
@@ -422,8 +442,8 @@ public class VideoJuego11 {
             Soldado temp = arrL.get(fil-1).get(col-1);//Guardamos el objeto del tablero para restaurarlo en la nueva posicion si gana
             arrL.get(fil-1).set(col-1,null); //Borramos del tablero el objeto en su antigua posicion si pierde lo dejamos asi
             Soldado rival = arrL.get(nuevoFil - 1).get(nuevoCol - 1); // Si se encuentra un rival en la nueva posicion
-            boolean miSoldadoeliminado=false;
-            if (rival != null && rival.getEjercito() != e) { //BATALLA, comprueba que exista un rival
+            boolean miSoldadoeliminado = false;
+            if (rival != null && rival.getEjercito() != unEjercito) { //BATALLA, comprueba que exista un rival
                 System.out.println("\t\t\t>>Se ha iniciado una batalla !!<<");
                 int ganador = definirGanadorBatalla(soldadoE,rival);
                 if (ganador == 1) {// El soldado gana 
@@ -432,7 +452,7 @@ public class VideoJuego11 {
                     soldadoE.ganarBatalla();
                     arrL.get(nuevoFil - 1).set(nuevoCol - 1, soldadoE); 
                     rival.morir(); //Baja la cantidad en la variable clase que maneja la cantidad total y por ejercito
-                    orden.remove(rival);
+                    orden.remove(rival); //Removemos del arrL que contiene los datos de los soldados
                     System.out.println("Su soldado ha ganado la batalla, el rival ha sido eliminado y su lugar sera ocupado!");
                     System.out.println("Ademas, su soldado gano +1 pto. de vida");
                 }
@@ -450,14 +470,14 @@ public class VideoJuego11 {
                 nvPosicionSoldado.setColumna(nuevoCol);
                 System.out.println("Soldado movido a " + nuevoFil+"x"+soldadoE.getColumnaStr());
             }
-            mostrarTablero(arrL);
+            mostrarTablero(arrL,r1,r2);
         }
         else
             System.out.println("...");
     }
-    public static boolean esMovimientoValido(ArrayList<ArrayList<Soldado>> arrL,int fila,int columna, int ejercito) { //Seguro
-        Soldado soldadoEnPosicion = arrL.get(fila - 1).get(columna - 1);
-        return soldadoEnPosicion == null || soldadoEnPosicion.getEjercito() != ejercito;
+    public static boolean esMovimientoValido(ArrayList<ArrayList<Soldado>> arrL,int fil,int col, Ejercito unEjercito) { //bien
+        Soldado soldadoEnPosicion = arrL.get(fil- 1).get(col - 1);
+        return (soldadoEnPosicion == null || soldadoEnPosicion.getEjercito() != unEjercito);
     }
     public static int definirGanadorBatalla(Soldado sold1,Soldado sold2){ //Devuelve el soldado ganador segun metrica
         int vidaSold1,vidaSold2;
