@@ -31,10 +31,12 @@ public class Soldado {
     public double getVidaActual(){
         return vidaActual;
     }
+    public void bonificacionxTerritorio(){
+        vidaActual++;
+    }
     public void mostrarDatos() {
         System.out.println("  Nombre: " + this.getNombre());
         System.out.println("  Ejercito: " + this.getEjercito());
         System.out.println("  Vida Actual: " + this.getVidaActual());
-    }
-        
+    }       
 }

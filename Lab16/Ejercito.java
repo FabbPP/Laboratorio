@@ -17,8 +17,14 @@ public final class Ejercito {
         }
         cantidadEjercitos++;
     }   
+    public int getCantidadSoldados(){
+        return soldados.size();
+    }
     public int getCantidadEjercitos() {
         return cantidadEjercitos;
+    }
+        public ArrayList <Soldado> getSoldados(){
+        return soldados;
     }
     public void setReino(Reino reino) {
         this.reino = reino;
@@ -26,7 +32,7 @@ public final class Ejercito {
     public Reino getReino(){
         return reino;
     }  
-    public double getNivelVidaTotal(){
+    public int getNivelVidaTotal(){
         return nivelVidaTotal;
     }
     public void agregarSoldado(Soldado unSoldado) {
