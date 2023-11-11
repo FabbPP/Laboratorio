@@ -16,14 +16,17 @@ public final class Ejercito {
             nivelVidaTotal += nuevoSoldado.getVidaActual();
         }
         cantidadEjercitos++;
-    }   
+    }
+    public void agregarSoldado(Soldado unSoldado) {
+          soldados.add(unSoldado);
+    }       
+    public static int getCantidadEjercitos() {
+        return cantidadEjercitos;
+    }
     public int getCantidadSoldados(){
         return soldados.size();
     }
-    public int getCantidadEjercitos() {
-        return cantidadEjercitos;
-    }
-        public ArrayList <Soldado> getSoldados(){
+    public ArrayList <Soldado> getSoldados(){
         return soldados;
     }
     public void setReino(Reino reino) {
@@ -35,8 +38,4 @@ public final class Ejercito {
     public int getNivelVidaTotal(){
         return nivelVidaTotal;
     }
-    public void agregarSoldado(Soldado unSoldado) {
-          soldados.add(unSoldado);
-    }
- 
 }

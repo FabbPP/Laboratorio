@@ -7,18 +7,14 @@ public class Soldado {
     private String nombre;
     private double vidaActual;
 
-    
-    //Constructor sobrecargado
-    public Soldado(){  //Simula un setNombre y es el principal
+    public Soldado(){  //Constructor
         vidaActual = (int)(Math.random() * 5 + 1);
         cantidadTotal ++;
     }
     //Metodos de clase
-    public static int getCantidadTotal(){
+    public static int getCantidadSoldados(){
         return cantidadTotal;
     }
-    //Get y set de atributos 
-     //Metodos de atributos solo accesores, ya definidos en clase Soldado
     public String getNombre(){
         return nombre;
     }
@@ -31,8 +27,8 @@ public class Soldado {
     public double getVidaActual(){
         return vidaActual;
     }
-    public void bonificacionxTerritorio(){
-        vidaActual++;
+    public void bonificacionXterritorio(){
+        vidaActual ++;
     }
     public void mostrarDatos() {
         System.out.println("  Nombre: " + this.getNombre());

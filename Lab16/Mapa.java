@@ -25,35 +25,39 @@ public class Mapa {
     static{
         BONOS_POR_TERRITORIO.put("Inglaterra", "bosque");
         BONOS_POR_TERRITORIO.put("Francia", "campo abierto");
-        BONOS_POR_TERRITORIO.put("Castilla Aragon", "montania");
+        BONOS_POR_TERRITORIO.put("Castilla_Aragon", "montania");
         BONOS_POR_TERRITORIO.put("Moros", "desierto");
-        BONOS_POR_TERRITORIO.put("Sacro Imperio", "bosque");
-        BONOS_POR_TERRITORIO.put("Sacro Imperio", "playa");
-        BONOS_POR_TERRITORIO.put("Sacro Imperio", "campo abierto");
+        BONOS_POR_TERRITORIO.put("Sacro_Imperio", "bosque");
+        BONOS_POR_TERRITORIO.put("Sacro_Imperio", "playa");
+        BONOS_POR_TERRITORIO.put("Sacro_Imperio", "campo abierto");
     }
     public Reino crearEjercitos(int random, int numJugador) {
         Scanner sc = new Scanner (System.in);
-        System.out.println("Bienvenido jugador "+numJugador+": \n**Escoja un nombre de Reino (Inglaterra, Francia, Sacro Imperio, Castilla Aragon y Moros)");
+        System.out.println("Bienvenido jugador "+numJugador+": \n**Escoja un nombre de Reino (Inglaterra, Francia, Sacro_Imperio, Castilla_Aragon y Moros)");
         System.out.print(" >Ingrese el nombre: ");
         String reinoE = sc.nextLine();
+        
         boolean encontrado = false;
-        for (String nombre: Reino.NOMBRES_DE_REINOS){
-            if (nombre.equals(reinoE)){
-                encontrado = true;
-                break;
-            }
-        }
         while(!encontrado){
+            for (String nombre: Reino.NOMBRES_DE_REINOS){
+                if (nombre.equals(reinoE)){
+                    encontrado = true;
+                    break;
+                }     
+            }
+            if (encontrado)
+                    break;
             System.out.print("ERROR - Nombre ingresado no dentro de la lista, intentelo de nuevo\n: ");
             reinoE = sc.nextLine();
         }
         Reino nuevoReino = new Reino(reinoE);
-        if (BONOS_POR_TERRITORIO.get(nuevoReino.getNombre()).equals(tipoDeTerritorio)){
-            System.out.println("Se agrego una bonificacion +1 de vida a tus soldados por ser tu campo de batalla");
+        String territorioReino = BONOS_POR_TERRITORIO.get(nuevoReino.getNombre());
+        if (territorioReino != null && tipoDeTerritorio.equals(territorioReino)){
+            System.out.println("--Se agrego una bonificacion +1 a la vida de tus soldados por ser su campo de batalla");
             ArrayList<Ejercito> ejercitos = nuevoReino.getEjercitos();
             for (Ejercito ejercito : ejercitos) {
                 for (Soldado soldado : ejercito.getSoldados()) 
-                     soldado.bonificacionxTerritorio();
+                     soldado.bonificacionXterritorio();
             }
         }
         for (int i = 0; i < random; i++) {
@@ -76,7 +80,7 @@ public class Mapa {
     }
     public void mostrarTablero() {
         int cs,nv;
-        System.out.println("     A     B     C     D     E     F     G     H     I     J");
+        System.out.println("     A      B      C      D      E      F      G      H      I      J");
         for (int i = 0; i < tablero.size(); i++) {
             if (i!=9)
                 System.out.print((i+1)+" ");
@@ -89,29 +93,43 @@ public class Mapa {
                     switch (posicion.getReino().getNombre()) {
                         case "Inglaterra":
                             color = "\u001B[32m";  // Verde
+                            posicion.getReino().setColor("verde");
                             break;
                         case "Francia":
                             color = "\u001B[34m";  // Azul
+                            posicion.getReino().setColor("azul");
                             break;
-                        case "Castilla Aragon":
+                        case "Castilla_Aragon":
                             color = "\u001B[33m";  // Amarillo
+                            posicion.getReino().setColor("amarillo");
                             break;
                         case "Moros":
                             color = "\u001B[31m";  // Rojo
+                            posicion.getReino().setColor("rojo");
                             break;
-                        case "Sacro Imperio":
+                        case "Sacro_Imperio":
                             color = "\u001B[36m";  // Cyan
+                            posicion.getReino().setColor("Cyan");
                             break;
                         default:
                             color = "\u001B[0m";   // Restaura el color original
                             break;
                     }
                     cs = posicion.getCantidadSoldados();
+                    String csStr,nvStr;
+                    if (cs<10)
+                        csStr = (" "+cs);
+                    else
+                        csStr = (cs+"");
                     nv = posicion.getNivelVidaTotal();
-                    System.out.print(color + "|" + cs + "-" + nv + "|" + "\u001B[0m"); // Restaura el color original
+                    if (nv<10)
+                        nvStr = (" "+nv);
+                    else
+                        nvStr = (nv+"");
+                    System.out.print(color + "|" + csStr + "-" + nvStr + "|" + "\u001B[0m"); // Restaura el color original
                 }
                 else 
-                    System.out.print("|____|");
+                    System.out.print("|_____|");
             }
             System.out.println();
         }
