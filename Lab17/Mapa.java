@@ -144,15 +144,16 @@ public class Mapa {
                 break;
             else {
                 mostrarTablero();
-                movimientoTurnoReino(reino1);
+                movimientoTurnoReino(reino1,reino2);
             }
             boolean esVacio2 = reino2.esReinoVacio(); //Empezamos turno reino2
             if (esVacio2)
                 break;
             else {
                 mostrarTablero();
-                movimientoTurnoReino(reino2);
+                movimientoTurnoReino(reino2,reino1);
             }
+            continuar = sigueTurnos(reino1,reino2);
         }
     }
     public boolean sigueTurnos(Reino reino1, Reino reino2){ //Secundario generarMovimiento
@@ -171,9 +172,9 @@ public class Mapa {
        }
        return false; //ALGUN Reino SE QUEDO SIN SOLDADOS, LA PARTIDA FINALIZA, TENEMOS UN GANADOR, no continuar turnos   
     }
-    public void movimientoTurnoReino(Reino unReino){//Secundario generarMovimiento
+    public void movimientoTurnoReino(Reino unReino,Reino otroReino){//Secundario generarMovimiento
         Scanner sc = new Scanner (System.in);
-        System.out.println("\n\t\t   >>>Turno de " + unReino.getNombre()+"<<<");
+        System.out.println("\n\t\t    >>>Turno de " + unReino.getNombre()+"<<<");
         System.out.println("\t\t\t>>>Color: "+unReino.getColor()+"<<<");
         System.out.println("**Elija un ejercito...");
         ArrayList<Ejercito> listaEjercitos = unReino.getEjercitos();
@@ -185,7 +186,7 @@ public class Mapa {
         }
         System.out.print(">Ingrese NRO. de ejercito: ");
         int numEnEjercitos = sc.nextInt();
-        Ejercito ejercitoE = ejercitos.get(numEnEjercitos-1); //veremos la ubicacion en el tablero
+        Ejercito ejercitoE = listaEjercitos.get(numEnEjercitos-1); //veremos la ubicacion en el tablero
         int fil = ejercitoE.getFila();
         int col = ejercitoE.getColumna();
         System.out.println("Ejercito ubicado "+fil+"x"+ejercitoE.getColumnaStr());
@@ -232,7 +233,7 @@ public class Mapa {
             ejercitoE.setFila(nuevoFil).setColumna(nuevoCol);
             tablero.get(nuevoFil-1).set(nuevoCol-1,ejercitoE); //Movemos el ejercito a la nueva posicion
             tablero.get(fil-1).set(col-1,null); //Borramos la anterior posicion
-            System.out.println("Soldado movido a "+nuevoFil+"x"+ejercitoE.getColumnaStr());
+            System.out.println("Ejercito movido a "+nuevoFil+"x"+ejercitoE.getColumnaStr());
         }
         else { //Existe rival
             System.out.println("\t\t\t>>Se ha iniciado una batalla !!<<");
@@ -242,15 +243,16 @@ public class Mapa {
                 ejercitoE.setFila(nuevoFil).setColumna(nuevoCol);
                 tablero.get(nuevoFil-1).set(nuevoCol-1,ejercitoE); //Movemos el ejercito a la nueva posicion
                 tablero.get(fil-1).set(col-1,null); //Borramos la anterior posicion
+                otroReino.eliminarEjercito(eRival);//Se elimina el ejercito rival
                 System.out.println("Su ejercito ha vencido la batalla, el ejercito rival ha sido eliminado y su lugar sera ocupado!");
                 ejercitoE.bonificacionXvencida();
                 System.out.println("Ademas, su ejercito gano +1 pto. de vida por bonificacion de la vencida");
-                System.out.println("Soldado movido a "+nuevoFil+"x"+ejercitoE.getColumnaStr());
+                System.out.println("--> Ejercito movido a "+nuevoFil+"x"+ejercitoE.getColumnaStr());
             }
             else { // el ejercito pierde
                 tablero.get(fil-1).set(col-1,null); //Borramos la anterior posicion del ejercito
                 unReino.eliminarEjercito(ejercitoE);
-                System.out.println("Su soldado ha perdido la batalla y ha sido eliminado.");
+                System.out.println("Su ejercito ha perdido la batalla y ha sido eliminado.");
             }
         }
     }
@@ -265,7 +267,7 @@ public class Mapa {
         total = vida1+vida2; //En double para que la division de probabilidad salga no entero
         proba1 = vida1/total;
         proba2 = vida2/total; //Aunque no es necesario calcularlo para definir el ganador, usado para poner el porcent
-        System.out.println("*Probabilidades de vencer...\nSu soldado = "+(proba1*100)+"%\t/\tSu rival = "+(proba2*100)+"%");
+        System.out.println("*Probabilidades de vencer...\nSu ejercito = "+(proba1*100)+"%\t/\tSu ejercito rival = "+(proba2*100)+"%");
         System.out.println("---> De acuerdo a dichas probabilidades se decidira el ganador aleatoriamente.\n...");
         aleat = Math.random(); //devuelve un numero aleatorio entre 0-1 (double) mas probabilidas tienen los de mayor vida
         if (aleat <= proba1)
