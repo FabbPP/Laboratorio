@@ -144,6 +144,7 @@ public class Mapa {
                 break;
             else {
                 mostrarTablero();
+                reino1.mostrarColores(reino2);
                 movimientoTurnoReino(reino1,reino2);
             }
             boolean esVacio2 = reino2.esReinoVacio(); //Empezamos turno reino2
@@ -151,6 +152,7 @@ public class Mapa {
                 break;
             else {
                 mostrarTablero();
+                reino2.mostrarColores(reino1);
                 movimientoTurnoReino(reino2,reino1);
             }
             continuar = sigueTurnos(reino1,reino2);
@@ -212,7 +214,13 @@ public class Mapa {
         for (int c=0; c<posicionesStr.size(); c++) 
             System.out.println(letrasPosicion.get(c)+".- "+posicionesStr.get(c));
         System.out.print(" >Ingrese LETRA en MAYUS de la direccion de movimiento seleccionada: ");
-        String direccionElegida = posicionesStr.get(letrasPosicion.indexOf(sc.next()));
+        String ingreso = sc.next();
+        while (letrasPosicion.indexOf(ingreso)==-1){
+            System.out.println("ERROR - letra ingresada no permitida, asegurese que este dentro de la lista y en MAYUS");
+            System.out.println(" >Ingrese LETRA en MAYUS de la direccion de movimiento seleccionada: ");
+            ingreso = sc.next();
+        }
+        String direccionElegida = posicionesStr.get(letrasPosicion.indexOf(ingreso));
         int nuevoFil = fil; //incializamos la nueva posicion 
         int nuevoCol = col;
         switch (direccionElegida){ //guardamos datos de nueva posicion para cada caso
@@ -235,15 +243,15 @@ public class Mapa {
             tablero.get(fil-1).set(col-1,null); //Borramos la anterior posicion
             System.out.println("Ejercito movido a "+nuevoFil+"x"+ejercitoE.getColumnaStr());
         }
-        else { //Existe rival
+        else { //Existe ejercito rival
             System.out.println("\t\t\t>>Se ha iniciado una batalla !!<<");
-            Ejercito eRival = tablero.get(fil-1).get(col-1);
+            Ejercito eRival = tablero.get(nuevoFil-1).get(nuevoCol-1);
             int ganador = definirVencedorBatalla(ejercitoE,eRival);
             if (ganador == 1) {// El ejercito gana 
                 ejercitoE.setFila(nuevoFil).setColumna(nuevoCol);
                 tablero.get(nuevoFil-1).set(nuevoCol-1,ejercitoE); //Movemos el ejercito a la nueva posicion
                 tablero.get(fil-1).set(col-1,null); //Borramos la anterior posicion
-                otroReino.eliminarEjercito(eRival);//Se elimina el ejercito rival
+                otroReino.getEjercitos().remove(eRival);//Se elimina el ejercito rival
                 System.out.println("Su ejercito ha vencido la batalla, el ejercito rival ha sido eliminado y su lugar sera ocupado!");
                 ejercitoE.bonificacionXvencida();
                 System.out.println("Ademas, su ejercito gano +1 pto. de vida por bonificacion de la vencida");

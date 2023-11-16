@@ -8,8 +8,6 @@ public class Videojuego13 {
             inicioTerritorio(territorio);
             Reino reino1 = territorio.crearEjercitos((int)(Math.random()*10) +1,1);
             Reino reino2 = territorio.crearEjercitos((int)(Math.random()*10) +1,2);
-            territorio.mostrarTablero();
-            mostrarColores(reino1,reino2);
             territorio.generarMovimiento(reino1,reino2);
             continuar = esContinuar();
         }
@@ -24,9 +22,5 @@ public class Videojuego13 {
         System.out.print("Desea generar otra partida y empezar de nuevo? (Y/N)\n: ");
         return (sc.next().equals("Y"));
     }
-    public static void mostrarColores(Reino reino1,Reino reino2){
-        System.out.println("REINOS: "+reino1.getNombre()+"\t"+reino2.getNombre());
-        System.out.println("COLOR:  "+reino1.getColor()+"\t\t"+reino2.getColor());
-        System.out.println("NUM:    "+reino1.getCantidadEjercitos()+"\t\t"+reino2.getCantidadEjercitos());
-    }
+    
 }

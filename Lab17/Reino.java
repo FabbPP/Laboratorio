@@ -50,4 +50,9 @@ public class Reino {
     public boolean contieneEjercito(Ejercito e){
         return ejercitos.contains(e); //ejercitos es el arraylist que contiene todo 
     }
+    public void mostrarColores(Reino otroReino){
+        System.out.println("REINOS: "+ nombre+"\t\t"+otroReino.getNombre());
+        System.out.println("COLOR:  "+color+"\t\t"+otroReino.getColor());
+        System.out.println("NUM:    "+this.getCantidadEjercitos()+"\t\t"+otroReino.getCantidadEjercitos());
+    }
 }
