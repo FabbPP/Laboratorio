@@ -8,23 +8,22 @@ public class Soldado {
     private String columnaStr;
     private Ejercito ejercito; 
     private String nombre;
-    private double vidaActual;
+    private int vidaActual;
 
-    public Soldado(String tipoDeSoldado){  //Constructor
-        int random = 0;
+    public Soldado(String tipoDeSoldado,Ejercito suEjercito){  //Constructor
         this.tipoDeSoldado = tipoDeSoldado;
+        ejercito = suEjercito;
         switch (tipoDeSoldado){
             case "Caballero" :
-                random = (int)((Math.random()*3)+3); // [3..5]
+                vidaActual = (int)((Math.random()*3)+3); // [3..5]
                 break;
             case "Espadachin" :
-                random = (int)((Math.random()*2)+3); //[3..4],
+                vidaActual = (int)((Math.random()*2)+3); //[3..4],
                 break;
             case "Arquero" :
-                random = (int)((Math.random()*3)+1); //[1..3] 
+                vidaActual = (int)((Math.random()*3)+1); //[1..3] 
                 break;
-        }
-        vidaActual = random;    
+        } 
         cantidadTotal ++;
     }
     public static int getCantidadSoldados(){
@@ -35,6 +34,9 @@ public class Soldado {
     }
     public String getNombre(){
         return nombre;
+    }
+    public String getTipoDeSoldado(){
+        return tipoDeSoldado;
     }
     public Soldado setFila(int fil){ //Method-call chaining
         fila = fil;
@@ -87,15 +89,13 @@ public class Soldado {
     public Ejercito getEjercito(){
         return ejercito;
     }    
-    public void setVidaActual(double va){
+    public void setVidaActual(int va){
         vidaActual = va;
     }
-    public double getVidaActual(){
+    public int getVidaActual(){
         return vidaActual;
     }
-    public void bonificacionXterritorio(){
-        vidaActual ++;
-    }
+
     public void mostrarDatos() {
         System.out.println("  Nombre: " + this.getNombre());
         System.out.println("  Ejercito: " + this.getEjercito());

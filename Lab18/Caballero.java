@@ -4,12 +4,9 @@ public class Caballero extends Soldado{
     private String armaActual = "Lanza";
     private boolean montando = true;
     
-    public Caballero(){
-        super("Caballero");
-        setNombre(("Caballero"+cantidad+"x"+getEjercito().getNombre()));
+    public Caballero(Ejercito suEjercito){
+        super("Caballero",suEjercito);
+        setNombre((getTipoDeSoldado()+cantidad+"x"+getEjercito().getNombre()));
         cantidad++;
-    }
-    public void agregarCaballero(){
-        
     }
 }

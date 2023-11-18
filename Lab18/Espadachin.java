@@ -3,9 +3,9 @@ public class Espadachin extends Soldado{
     private static int cantidad = 0;
     private double longitudDeEspada;
     
-    public Espadachin(){
-        super("Espadachin");
-        setNombre(("Espadachin"+cantidad+"x"+getEjercito().getNombre()));
+    public Espadachin(Ejercito suEjercito){
+        super("Espadachin",suEjercito);
+        setNombre((getTipoDeSoldado()+cantidad+"x"+getEjercito().getNombre()));
         cantidad++;
     }
     public void crearMurodeEspadas(){
