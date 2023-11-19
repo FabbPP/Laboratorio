@@ -8,20 +8,24 @@ public class Soldado {
     private String columnaStr;
     private Ejercito ejercito; 
     private String nombre;
-    private double vidaActual;
+    private int vidaActual;
 
-    public Soldado(String tipoDeSoldado){  //Constructor
+    public Soldado(String tipoDeSoldado,Ejercito suEjercito){  //Constructor
         this.tipoDeSoldado = tipoDeSoldado;
+        ejercito = suEjercito;
         switch (tipoDeSoldado){
-            case "Caballero" :
+            case "Caballero" :{
                 vidaActual = (int)((Math.random()*3)+3); // [3..5]
                 break;
-            case "Espadachin" :
+            }
+            case "Espadachin" :{
                 vidaActual = (int)((Math.random()*2)+3); //[3..4],
                 break;
-            case "Arquero" :
+            }
+            case "Arquero" :{
                 vidaActual = (int)((Math.random()*3)+1); //[1..3] 
                 break;
+            }
         } 
         cantidadTotal ++;
     }
@@ -37,6 +41,9 @@ public class Soldado {
     public String getTipoDeSoldado(){
         return tipoDeSoldado;
     }
+    public String getTipoAbreviado() {
+        return tipoDeSoldado.substring(0, 1); // Obtener la primera letra del tipo de Soldado
+    }   
     public Soldado setFila(int fil){ //Method-call chaining
         fila = fil;
         return this;
@@ -88,18 +95,18 @@ public class Soldado {
     public Ejercito getEjercito(){
         return ejercito;
     }    
-    public void setVidaActual(double va){
+    public void setVidaActual(int va){
         vidaActual = va;
     }
-    public double getVidaActual(){
+    public int getVidaActual(){
         return vidaActual;
-    }
-    public void bonificacionXterritorio(){
-        vidaActual ++;
     }
     public void mostrarDatos() {
         System.out.println("  Nombre: " + this.getNombre());
         System.out.println("  Ejercito: " + this.getEjercito());
         System.out.println("  Vida Actual: " + this.getVidaActual());
-    }       
+    }     
+    public void bonificacionxVencida(){
+        this.vidaActual ++;
+    }
 }

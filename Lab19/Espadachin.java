@@ -3,8 +3,8 @@ public class Espadachin extends Soldado{
     private static int cantidad = 0;
     private double longitudDeEspada;
     
-    public Espadachin(){
-        super("Espadachin");
+    public Espadachin(Ejercito suEjercito){
+        super("Espadachin",suEjercito);
         setNombre((getTipoDeSoldado()+cantidad+"x"+getEjercito().getNombre()));
         cantidad++;
     }

@@ -9,23 +9,20 @@ public final class Ejercito {
     private ArrayList <Soldado> caballeros = new ArrayList<>();
     private ArrayList <Soldado> espadachines = new ArrayList<>();
     private ArrayList <Soldado> arqueros = new ArrayList<>();
-    private int cantidadSoldados;
+    private int cantidadSoldadosCrear;
     private int nivelVidaTotal;
     
     public Ejercito(int num) {
-        cantidadSoldados = (int)(Math.random()*10+1); //Define la cantidad de soldados aleatorios
+        cantidadSoldadosCrear = (int)(Math.random()*10+1); //Define la cantidad de soldados aleatorios
         nombre = (Integer.toString(num));
         cantidadEjercitos++;
-    }
-    public static int getCantidadEjercitos() {
-        return cantidadEjercitos;
-    } 
-    public int existencia(){ //secundario en constructor
-        return (int)(Math.random()*2);
-    }
+    }   
     public void agregarSoldado(Soldado unSoldado) {
         soldados.add(unSoldado);
     }    
+    public void eliminarSoldado(Soldado unSoldado){
+        soldados.remove(unSoldado);
+    }
     public void agregarCaballero(Caballero unCaballero){
         caballeros.add(unCaballero);
         soldados.add(unCaballero);
@@ -50,15 +47,24 @@ public final class Ejercito {
     public ArrayList <Soldado> getSoldados(){
         return soldados;
     }
+    public int getCantidadSoldadosCrear(){
+        return cantidadSoldadosCrear;
+    }
     public int getCantidadSoldados(){
         return soldados.size();
     }
     public int getNivelVidaTotal(){
         return nivelVidaTotal;
     }
-    public void bonificacionXvencida(){
-        for (Soldado soldado : soldados){
-            soldado.setVidaActual(soldado.getVidaActual()+1);
-        }
+    public boolean esEjercitoVacio(){
+        return (soldados.isEmpty());
     }
+    public void mostrarColores(Ejercito otroEjercito){
+        this.setColor("rojo");
+        otroEjercito.setColor("azul");
+        System.out.println("EJERCITOS: "+"Ejercito 1\t Ejercito 2");
+        System.out.println("COLOR:  "+this.getColor()+"\t\t"+otroEjercito.getColor());
+        System.out.println("NUM:    "+this.getCantidadSoldados()+"\t\t"+otroEjercito.getCantidadSoldados());
+    }
+    
 }
