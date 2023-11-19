@@ -212,6 +212,5 @@ public class Mapa {
             return 1; //Gana soldado 1 
         else 
             return 2; //Gana soldado 2
-    }
-    
+    }      
 }
