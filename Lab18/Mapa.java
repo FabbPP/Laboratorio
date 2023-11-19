@@ -14,7 +14,6 @@ public class Mapa {
         }
     }
     public Ejercito crearEjercito(int random, int numJugador) {
-        Scanner sc = new Scanner(System.in);
         System.out.println("Bienvenido jugador " + numJugador);
         Ejercito nuevoEjercito = new Ejercito(numJugador);
         agregarEjercito(nuevoEjercito);
@@ -63,7 +62,7 @@ public class Mapa {
                 if (p != null){
                     Ejercito ejercito = p.getEjercito();
                     String color = (ejercito==ejercitos.get(0))? "\u001B[31m" : (ejercito==ejercitos.get(1))? "\u001B[34m" : "\u001B[0m";
-                    System.out.print(color+"|"+p.getTipoDeSoldado().indexOf(0)+p.getVidaActual()+"|" + "\u001B[0m"); // Restaura el color original
+                    System.out.print(color+"|"+p.getTipoAbreviado()+p.getVidaActual()+"|" + "\u001B[0m"); // Restaura el color original
                 }
                 else 
                     System.out.print("|__|");

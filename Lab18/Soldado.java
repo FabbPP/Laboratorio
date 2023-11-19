@@ -14,15 +14,18 @@ public class Soldado {
         this.tipoDeSoldado = tipoDeSoldado;
         ejercito = suEjercito;
         switch (tipoDeSoldado){
-            case "Caballero" :
+            case "Caballero" :{
                 vidaActual = (int)((Math.random()*3)+3); // [3..5]
                 break;
-            case "Espadachin" :
+            }
+            case "Espadachin" :{
                 vidaActual = (int)((Math.random()*2)+3); //[3..4],
                 break;
-            case "Arquero" :
+            }
+            case "Arquero" :{
                 vidaActual = (int)((Math.random()*3)+1); //[1..3] 
                 break;
+            }
         } 
         cantidadTotal ++;
     }
@@ -38,6 +41,9 @@ public class Soldado {
     public String getTipoDeSoldado(){
         return tipoDeSoldado;
     }
+    public String getTipoAbreviado() {
+        return tipoDeSoldado.substring(0, 1); // Obtener la primera letra del tipo de Soldado
+    }   
     public Soldado setFila(int fil){ //Method-call chaining
         fila = fil;
         return this;
@@ -95,7 +101,6 @@ public class Soldado {
     public int getVidaActual(){
         return vidaActual;
     }
-
     public void mostrarDatos() {
         System.out.println("  Nombre: " + this.getNombre());
         System.out.println("  Ejercito: " + this.getEjercito());
