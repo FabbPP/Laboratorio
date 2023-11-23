@@ -46,7 +46,7 @@ public class Mapa {
             nuevoSoldado.setFila(fil).setColumna(col);
             tablero.get(fil-1).set(col-1, nuevoSoldado);
             nuevoEjercito.agregarSoldado(nuevoSoldado);
-        }
+        }   
         return nuevoEjercito;
     }
     public void agregarEjercito(Ejercito nuevoEjercito){
@@ -82,14 +82,18 @@ public class Mapa {
                     ejercito1.mostrarColores(ejercito2);
                     movimientoTurnoEjercito(ejercito1,ejercito2);
                 }
+                else
+                    break;
                 boolean esVacio2 = ejercito2.esEjercitoVacio(); //Empezamos turno reino2
                 if (!esVacio2){
                     mostrarTablero();
                     ejercito1.mostrarColores(ejercito2);
                     movimientoTurnoEjercito(ejercito2,ejercito1);
                 }
-                continuar = sigueTurnos(ejercito1,ejercito2);
+                else
+                    break;
             }
+            continuar = sigueTurnos(ejercito1,ejercito2);
     }
     public boolean sigueTurnos(Ejercito ejercito1, Ejercito ejercito2){ //Secundario generarMovimiento
        if (!(ejercito1.esEjercitoVacio() && ejercito2.esEjercitoVacio()))
