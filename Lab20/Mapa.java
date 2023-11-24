@@ -76,41 +76,43 @@ public class Mapa {
     public void generarMovimiento(Ejercito ejercito1,Ejercito ejercito2){ //PRINCIPAL
             boolean continuar = sigueTurnos(ejercito1,ejercito2);
             while (continuar){
-                boolean esVacio1 = ejercito1.esEjercitoVacio(); //Empezamos turno reino1
-                if (!esVacio1){
+                boolean esVacio1 = ejercito1.getCantidadSoldados() == 0; ; //Empezamos turno rojo
+                if (!(esVacio1)&&sigueTurnos(ejercito1,ejercito2)){
                     mostrarTablero();
                     ejercito1.mostrarColores(ejercito2);
                     movimientoTurnoEjercito(ejercito1,ejercito2);
                 }
                 else
                     break;
-                boolean esVacio2 = ejercito2.esEjercitoVacio(); //Empezamos turno reino2
-                if (!esVacio2){
+                boolean esVacio2 = ejercito2.getCantidadSoldados() == 0; //Empezamos turno azul
+                if (!(esVacio2)&&sigueTurnos(ejercito1,ejercito2)){
                     mostrarTablero();
                     ejercito1.mostrarColores(ejercito2);
                     movimientoTurnoEjercito(ejercito2,ejercito1);
                 }
                 else
                     break;
+                continuar = sigueTurnos(ejercito1,ejercito2);
             }
-            continuar = sigueTurnos(ejercito1,ejercito2);
+            System.out.print("Partida terminada, ");
+            if (ejercito2.esEjercitoVacio()){ //No es necesario invocar ambos booleanos segun la condicion...
+                System.out.println("la totalidad del ejercito azul fue eliminado");
+                System.out.println("------> EL EJERCITO ROJO GANO <------");
+                System.out.println("------> Felicidades ejercito ROJO     ganaste la partida! <------");
+            }
+            else { //Si gano el ejercito azul
+                System.out.println("la totalidad del ejercito rojo fue eliminado");
+                System.out.println("------> EL EJERCITO AZUL GANO <------");
+                System.out.println("------> Felicidades ejercito AZUL ganaste la partida!<------");
+            }
     }
     public boolean sigueTurnos(Ejercito ejercito1, Ejercito ejercito2){ //Secundario generarMovimiento
        if (!(ejercito1.esEjercitoVacio() && ejercito2.esEjercitoVacio()))
            return true; //ambos reinos siguen manteniendo ejercitos continuan el par de turnos
-       System.out.print("Partida terminada, ");
-       if (ejercito1.esEjercitoVacio()){ //No es necesario invocar ambos booleanos segun la condicion...
-           System.out.println("la totalidad del ejercito azul fue eliminado");
-           System.out.println("------> EL EJERCITO ROJO GANO <------");
-           System.out.println("------> Felicidades ejercito ROJO     ganaste la partida! <------");
-       }
-       else { //Si gano el equipo 0
-           System.out.println("la totalidad del ejercito rojo fue eliminado");
-           System.out.println("------> EL EJERCITO AZUL GANO <------");
-           System.out.println("------> Felicidades ejercito AZUL ganaste la partida!<------");
-       }
        return false; //ALGUN Reino SE QUEDO SIN SOLDADOS, LA PARTIDA FINALIZA, TENEMOS UN GANADOR, no continuar turnos   
-    }
+   }
+    
+
     public void movimientoTurnoEjercito(Ejercito ejercitoTurno, Ejercito ejercitoOtro){//Secundario generarMovimiento
         Scanner sc = new Scanner (System.in);
         System.out.println("\n\t\t    >>>Turno de Ejercito " + ejercitoTurno.getNombre()+"<<<");
