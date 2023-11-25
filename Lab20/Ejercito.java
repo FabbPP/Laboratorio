@@ -8,7 +8,6 @@ public final class Ejercito {
     private ArrayList <Soldado> soldados = new ArrayList<>();
     private int cantidadSoldadosCrear;
     private double nivelVidaTotal = 0;
-    private double promedioNivelVidaTotal;
     
     public Ejercito(int num) {
         cantidadSoldadosCrear = (int)(Math.random()*10+1); //Define la cantidad de soldados aleatorios
@@ -61,11 +60,36 @@ public final class Ejercito {
     public boolean esEjercitoVacio(){
         return (soldados.isEmpty());
     }
-    public void mostrarColores(Ejercito otroEjercito){
-        this.setColor("rojo");
-        otroEjercito.setColor("azul");
-        System.out.println("EJERCITOS: "+"Ejercito 1\t Ejercito 2");
-        System.out.println("COLOR:  "+this.getColor()+"\t\t"+otroEjercito.getColor());
-        System.out.println("NUM:    "+this.getCantidadSoldados()+"\t\t"+otroEjercito.getCantidadSoldados());
+    public void mostrarDatosSoldados(){ //Mostrara en el orden que fueron creados, el array esta en orden de creacion
+        for (Soldado unSoldado : soldados){
+            unSoldado.mostrarDatos();
+        }
+    }
+    public void mostrarRankingDePoder(){ 
+        ArrayList<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < soldados.size(); i++) {
+            indices.add(i);
+        }
+        int temp;
+        for (int i = 0; i < soldados.size() - 1; i++) {
+            for (int j = 0; j < soldados.size() - i - 1; j++) {
+                if (soldados.get(j) != null) {
+                    int ant = soldados.get(indices.get(j)).getVidaActual();
+                    int pos = soldados.get(indices.get(j + 1)).getVidaActual();
+                    if (ant < pos) {
+                        temp = indices.get(j);
+                        indices.set(j, indices.get(j + 1));
+                        indices.set(j + 1, temp);
+                    }
+                }
+            }
+        }
+        System.out.println("RANKING DE PODER POR ORDENAMIENTO BURBUJA...");
+        
+        for (int i = 0; i < soldados.size(); i++) {
+            int index = indices.get(i);
+            Soldado soldado = soldados.get(index);
+            System.out.println((i + 1) + ".- " + soldado.getNombre() + "/ salud: " + soldado.getVidaActual());
+        }
     }
 }

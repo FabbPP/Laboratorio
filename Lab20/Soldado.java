@@ -106,7 +106,8 @@ public class Soldado {
     }
     public void mostrarDatos() {
         System.out.println("  Nombre: " + this.getNombre());
-        System.out.println("  Ejercito: " + this.getEjercito());
+        System.out.println("  Fila: " + this.getFila());
+        System.out.println("  Columna: " + this.getColumnaStr());
         System.out.println("  Vida Actual: " + this.getVidaActual());
     }     
     public void bonificacionxVencida(){
