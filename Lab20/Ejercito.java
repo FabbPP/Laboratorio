@@ -7,7 +7,8 @@ public final class Ejercito {
     private String color;
     private ArrayList <Soldado> soldados = new ArrayList<>();
     private int cantidadSoldadosCrear;
-    private int nivelVidaTotal;
+    private double nivelVidaTotal = 0;
+    private double promedioNivelVidaTotal;
     
     public Ejercito(int num) {
         cantidadSoldadosCrear = (int)(Math.random()*10+1); //Define la cantidad de soldados aleatorios
@@ -16,6 +17,7 @@ public final class Ejercito {
     }   
     public void agregarSoldado(Soldado unSoldado) {
         soldados.add(unSoldado);
+        nivelVidaTotal += unSoldado.getVidaActual();
     }    
     public void eliminarSoldado(Soldado unSoldado){
         soldados.remove(unSoldado);
@@ -50,8 +52,11 @@ public final class Ejercito {
     public int getCantidadSoldados(){
         return soldados.size();
     }
-    public int getNivelVidaTotal(){
+    public double getNivelVidaTotal(){
         return nivelVidaTotal;
+    }
+    public double getPromedioNivelVidaTotal(){
+        return nivelVidaTotal/soldados.size();
     }
     public boolean esEjercitoVacio(){
         return (soldados.isEmpty());
