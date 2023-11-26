@@ -30,6 +30,7 @@ public class Soldado {
                 vidaActual = (int)((Math.random()*4)+5); //[5..8] 
                 break;
         } 
+        setNombre((getTipoDeSoldado()+getEjercito().getCantidadSoldados()+"x"+getEjercito().getNombre()));
         cantidadTotal ++;
     }
     public static int getCantidadSoldados(){
@@ -105,10 +106,14 @@ public class Soldado {
         return vidaActual;
     }
     public void mostrarDatos() {
-        System.out.println("  Nombre: " + this.getNombre());
-        System.out.println("  Ejercito: " + this.getEjercito());
-        System.out.println("  Vida Actual: " + this.getVidaActual());
-    }     
+        System.out.println("  Nombre: " + nombre);
+        System.out.println("  Reino: "+this.getEjercito().getReino().getNombre());
+        System.out.println("  Fila: " + fila);
+        System.out.println("  Columna: " + columnaStr);
+        System.out.println("  Vida Actual: " + vidaActual );
+        System.out.println("  Nivel de Ataque: " + nivelAtaque);
+        System.out.println("  Nivel de defensa: " + nivelDefensa +"\n_______________\n");
+    }  
     public void bonificacionxVencida(){
         this.vidaActual ++;
     }

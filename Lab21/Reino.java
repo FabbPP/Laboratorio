@@ -4,7 +4,9 @@ public class Reino {
     private String nombre;
      
     public Reino(String n){
-        nombre = n;
-       
+        nombre = n;      
+    }
+    public String getNombre(){
+        return nombre;
     }
 }

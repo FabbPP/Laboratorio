@@ -4,8 +4,7 @@ public class Espadachin extends Soldado{
     private double longitudDeEspada;
     
     public Espadachin(Ejercito suEjercito){
-        super("Espadachin",suEjercito);
-        setNombre((getTipoDeSoldado()+cantidad+"x"+getEjercito().getNombre()));
+        super("Espadachin",suEjercito);      
         nivelAtaque = 10;
         nivelDefensa = 8;
         cantidad++;

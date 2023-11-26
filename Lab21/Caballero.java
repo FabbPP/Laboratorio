@@ -5,8 +5,7 @@ public class Caballero extends Soldado{
     private boolean montando;
     
     public Caballero(Ejercito suEjercito){
-        super("Caballero",suEjercito);
-        setNombre((getTipoDeSoldado()+cantidad+"x"+getEjercito().getNombre()));
+        super("Caballero",suEjercito);      
         nivelAtaque = 13;
         nivelDefensa = 7;
         cantidad++;

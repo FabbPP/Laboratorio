@@ -5,7 +5,6 @@ public class Arquero extends Soldado{
     
     public Arquero(Ejercito suEjercito){
         super("Arquero",suEjercito);
-        setNombre((getTipoDeSoldado()+cantidad+"x"+getEjercito().getNombre()));
         nivelAtaque = 7;
         nivelDefensa = 3;
         cantidad++;
