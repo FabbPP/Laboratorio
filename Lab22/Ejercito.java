@@ -10,16 +10,18 @@ public final class Ejercito {
     private ArrayList <Soldado> caballeros = new ArrayList<>();
     private ArrayList <Soldado> lanceros = new ArrayList<>();
     private ArrayList <Soldado> espadachines = new ArrayList<>();
+    private ArrayList <Soldado> unidadesEspeciales = new ArrayList<>();
 
     private int cantidadSoldadosCrear;
     private double nivelVidaTotal = 0;
     private Reino reino;
     
-    public Ejercito(int num,Reino unReino) {
+    public Ejercito(int num,Reino unReino, String unColor) {
         cantidadSoldadosCrear = (int)(Math.random()*10+1); //Define la cantidad de soldados aleatorios
         nombre = unReino.getNombre();
         cantidadEjercitos++;
         reino = unReino;
+        color = unColor;
     }   
     public void agregarSoldado(Soldado unSoldado) {
         soldados.add(unSoldado);
@@ -36,9 +38,29 @@ public final class Ejercito {
             case ("Espadachin"):
                 espadachines.add(unSoldado);
                 break;
+            default :
+                unidadesEspeciales.add(unSoldado);
         }
         nivelVidaTotal += unSoldado.getVidaActual();
     }    
+    public void eliminarSoldado(Soldado unSoldado){
+        soldados.remove(unSoldado);
+        switch(unSoldado.tipoDeSoldado){
+            case ("Arquero"):
+                arqueros.remove(unSoldado);
+                break;
+            case ("Caballero"):
+                caballeros.remove(unSoldado);
+                break;
+            case ("Lancero"):
+                lanceros.remove(unSoldado);
+                break;
+            case ("Espadachin"):
+                espadachines.remove(unSoldado);
+                break;
+        }
+        nivelVidaTotal -= unSoldado.getVidaActual();
+    }
     public String getNombre(){
         return nombre;
     }
@@ -63,6 +85,14 @@ public final class Ejercito {
     public double getNivelVidaTotal(){
         return nivelVidaTotal;
     }
+    public void mostrarColores(Ejercito otroEjercito){
+        System.out.println("EJERCITOS: "+"Ejercito 1\t Ejercito 2");
+        System.out.println("COLOR:  "+this.getColor()+"\t\t"+otroEjercito.getColor());
+        System.out.println("NUM:    "+this.getCantidadSoldados()+"\t\t"+otroEjercito.getCantidadSoldados());
+    }
+    public boolean esEjercitoVacio(){
+        return (soldados.isEmpty());
+    }
     public void mostrarInformacion(int i){
         System.out.println("Ejercito "+i+": "+ nombre);
         System.out.println("Cantidad Total de soldados: "+ soldados.size());
@@ -70,6 +100,10 @@ public final class Ejercito {
         System.out.println("Arqueros: "+ arqueros.size());
         System.out.println("Caballeros: "+ caballeros.size());
         System.out.println("Lanceros: "+ lanceros.size());
+        if (unidadesEspeciales.size() > 0)
+            System.out.println(unidadesEspeciales.get(0).getTipoDeSoldado()+":"+ unidadesEspeciales.size());
+        else
+            System.out.println("Sin unidades especiales");
     }
     public void mostrarDatosSoldados(){ //Mostrara en el orden que fueron creados, el array esta en orden de creacion
         System.out.println("--> Lista de Soldados: ");

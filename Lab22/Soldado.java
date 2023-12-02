@@ -1,5 +1,5 @@
 package Lab22;
-public class Soldado {
+public abstract class Soldado {
     public static final int MAX_CANTIDAD = 10;//Constante de Clase
     private static int cantidadTotal = 0; //Variable de Clase
     protected String tipoDeSoldado;
@@ -8,7 +8,7 @@ public class Soldado {
     private String columnaStr;
     private Ejercito ejercito; 
     private String nombre;
-    private int vidaActual;
+    protected int vidaActual;
     protected String actitud; //Defensiva, fuga
     protected int nivelAtaque;
     protected int nivelDefensa; 
@@ -35,7 +35,7 @@ public class Soldado {
     }
     public static int getCantidadSoldados(){
         return cantidadTotal;
-    }
+    } 
     public String getNombre(){
         return nombre;
     }
